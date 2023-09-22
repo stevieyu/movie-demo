@@ -32,7 +32,7 @@ jobs:
     - name: Deploy to foo-bar.surge.sh
       uses: dswistowski/surge-sh-action@v1
       with:
-        domain: 'foo-bar.surge.sh'
-        project: '.'
+        domain: 'movie.surge.stevie.top'
+        project: 'dist'
         login: dugujianxiao@126.com
         token: ${{ secrets.surge_token }}
