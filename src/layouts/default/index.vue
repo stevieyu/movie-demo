@@ -1,8 +1,8 @@
 <template>
-  <v-app>
+  <v-app class="h-screen">
     <default-bar />
 
-    <default-view />
+    <default-view style="max-height: 100%;"/>
   </v-app>
 </template>
 
