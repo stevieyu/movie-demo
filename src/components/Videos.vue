@@ -14,5 +14,5 @@
 </template>
 <script setup>
 import {ref, onMounted} from 'vue'
-const items = ref((new Array(9999)).fill(1).map((i, idx) => i + idx))
+const items = ref((new Array(99)).fill(1).map((i, idx) => i + idx))
 </script>
