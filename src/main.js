@@ -13,6 +13,8 @@ import { createApp } from 'vue'
 // Plugins
 import { registerPlugins } from '@/plugins'
 
+window.__DEV__ = import.meta.env.DEV
+
 const app = createApp(App)
 
 registerPlugins(app)

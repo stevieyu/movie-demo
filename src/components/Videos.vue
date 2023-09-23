@@ -56,15 +56,16 @@ const loadMore = (_pg = null) => {
     updateQuery: (previousResult, { fetchMoreResult }) => {
         if (!fetchMoreResult) return previousResult
 
+        let ret = {};
         for(const k of Object.keys(fetchMoreResult)) {
           const v = fetchMoreResult[k]
           if(Array.isArray(previousResult[k]) && Array.isArray(v)){
-            previousResult[k].push(...v);
+            ret[k] = previousResult[k].concat(v)
             continue;
           }
-          previousResult[k] = v
+          ret[k] = v
         }
-        return {...previousResult}
+        return ret
       },
   })
 }
