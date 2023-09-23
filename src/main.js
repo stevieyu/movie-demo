@@ -13,6 +13,7 @@ import { createApp } from 'vue'
 // Plugins
 import { registerPlugins } from '@/plugins'
 
+window.HELP_IMPROVE_VIDEOJS = false;
 window.__DEV__ = import.meta.env.DEV
 
 const app = createApp(App)
