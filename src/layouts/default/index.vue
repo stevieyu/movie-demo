@@ -1,5 +1,5 @@
 <template>
-  <v-app class="h-screen">
+  <v-app class="h-screen" theme="dark">
     <default-bar />
 
     <default-view style="max-height: 100%;"/>

@@ -2,8 +2,7 @@
   <v-app-bar flat>
     <v-app-bar-title>
       <v-icon icon="mdi-circle-slice-6" />
-
-      Essentials Preset
+      XX影视
     </v-app-bar-title>
   </v-app-bar>
 </template>
