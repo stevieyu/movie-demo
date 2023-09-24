@@ -5,7 +5,7 @@
   </div>
 </template>
 <script setup>
-import {onMounted, onBeforeUnmount, ref, watch} from 'vue'
+import {onMounted, onBeforeUnmount, ref} from 'vue'
 
 const props = defineProps({
   playlist: {
@@ -68,12 +68,12 @@ onBeforeUnmount(() => {
 .vjs-playlist-thumbnail{
   display: flex;
   justify-content: space-between;
-  flex: auto;
 }
 
 .vjs-playlist-title-container {
   display: flex;
   justify-content: space-between;
+  flex: auto;
 }
 .vjs-up-next-text{
   flex-grow: 1;
