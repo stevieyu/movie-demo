@@ -50,6 +50,8 @@ const movies = ref([])
 watch(result, () => {
   movies.value.push(...(result.value?.movies || []))
   // console.log('watchEffect: ', movies.value)
+}, {
+  immediate: true,
 })
 
 const loadMore = (_pg = null) => {
