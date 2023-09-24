@@ -17,6 +17,8 @@ const props = defineProps({
 const videoPlayerEl = ref(null)
 const playlistEl = ref(null)
 
+const {videojs} = window
+
 // https://videojs.com/guides/options/
 const videoPlayerDefaultOptions = {
   autoplay: false,
@@ -31,10 +33,11 @@ const videoPlayerDefaultOptions = {
     }
   }
 }
-let player;
 
+
+let player;
 onMounted(() => {
-  player = window.videojs(
+  player = videojs(
     videoPlayerEl.value,
     {
       ...videoPlayerDefaultOptions
@@ -93,6 +96,22 @@ onBeforeUnmount(() => {
   opacity: 1;
 }
 .vjs-selected .vjs-playlist-now-playing-text {
+  display: block;
+}
+.video-js .vjs-title-bar {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: none;
+  font-size: 2em;
+  padding: .5em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.video-js.vjs-paused.vjs-has-started .vjs-title-bar,
+.video-js.vjs-user-active.vjs-has-started .vjs-title-bar{
   display: block;
 }
 </style>
