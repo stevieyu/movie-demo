@@ -20,6 +20,7 @@ const playlistEl = ref(null)
 const videoPlayerDefaultOptions = {
   autoplay: false,
   controls: true,
+  playbackRates: [0.5, 1, 1.5, 2, 3, 4, 5],
   language: 'zh-Hans',
   languages: {
     'zh-Hans': {
