@@ -17,6 +17,7 @@ const props = defineProps({
 const videoPlayerEl = ref(null)
 const playlistEl = ref(null)
 
+// https://videojs.com/guides/options/
 const videoPlayerDefaultOptions = {
   autoplay: false,
   controls: true,
