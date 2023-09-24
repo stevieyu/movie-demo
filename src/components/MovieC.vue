@@ -8,6 +8,7 @@ import {computed, reactive, ref, watch} from 'vue'
 import {useQuery} from '@vue/apollo-composable'
 import PlayerVideo from './PlayerVideo.vue'
 import gql from 'graphql-tag'
+import {url} from "@/config/vod";
 
 const props = defineProps({
   id: {
@@ -18,8 +19,8 @@ const props = defineProps({
 
 
 const {result, loading} = useQuery(gql`
-query($ids: [String!]){
-  movies(ids: $ids){
+query($ids: [String!], $url: URL!){
+  movies(ids: $ids, _url: $url){
     id
     name
     remarks
@@ -51,7 +52,8 @@ query($ids: [String!]){
   }
 }
 `, {
-  ids: [props.id]
+  ids: [props.id],
+  url
 })
 
 
