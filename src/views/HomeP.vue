@@ -1,13 +1,13 @@
 <template>
   <!-- <HelloWorld /> -->
-  <Movie v-if="$route.params.id" :id="$route.params.id"/>
-  <Movies v-else/>
+  <MovieC v-if="$route.params.id" :id="$route.params.id"/>
+  <MoviesC v-else/>
 </template>
 
 <script setup>
 // import HelloWorld from '@/components/HelloWorld.vue'
-import Movies from '@/components/Movies.vue'
-import Movie from '@/components/Movie.vue';
+import MoviesC from '@/components/MoviesC.vue'
+import MovieC from '@/components/MovieC.vue';
 import {useRoute} from 'vue-router'
 
 const $route = useRoute()

@@ -1,4 +1,5 @@
 <template>
+  <v-progress-linear color="primary" indeterminate v-if="loading"/>
 <v-virtual-scroll
     max-height="100%"
     :items="movies"
@@ -17,17 +18,20 @@
         </div>
     </template>
 </v-virtual-scroll>
+  <v-alert v-if="error" closable :text="error" type="error" variant="tonal"/>
 </template>
 <script setup>
-import {ref, watch, computed} from 'vue'
+import {reactive, ref, watch} from 'vue'
 import {useRouter} from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 const $router = useRouter()
 
-let pg = 1
-const { result, fetchMore, loading } = useQuery(gql`
+const variables = reactive({
+  pg: 1
+})
+const { result, loading, error } = useQuery(gql`
 query($pg: Int!){
   movies(pg: $pg){
     id
@@ -40,35 +44,15 @@ query($pg: Int!){
     }
   }
 }
-`, () => ({
-    pg
-}))
+`, variables)
 
-const movies = computed(() => result.value?.movies || [])
-
-// watch(() => {console.log(result.value?.movies);})
-// setInterval(() => loadMore(), 5000)
+const movies = ref([])
+watch(result, () => {
+  movies.value.push(...(result.value?.movies || []))
+  // console.log('watchEffect: ', movies.value)
+})
 
 const loadMore = (_pg = null) => {
-  pg = _pg ?? pg+1;
-  fetchMore({
-    variables: {
-      pg,
-    },
-    updateQuery: (previousResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return previousResult
-
-        let ret = {};
-        for(const k of Object.keys(fetchMoreResult)) {
-          const v = fetchMoreResult[k]
-          if(Array.isArray(previousResult[k]) && Array.isArray(v)){
-            ret[k] = previousResult[k].concat(v)
-            continue;
-          }
-          ret[k] = v
-        }
-        return ret
-      },
-  })
+  variables.pg = _pg ?? variables.pg+1;
 }
 </script>
