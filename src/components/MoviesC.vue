@@ -18,7 +18,7 @@
         </div>
     </template>
 </v-virtual-scroll>
-  <v-alert v-if="error" closable :text="error" type="error" variant="tonal"/>
+  <v-alert v-if="error" closable :text="error.message" type="error" variant="tonal"/>
 </template>
 <script setup>
 import {reactive, ref, watch} from 'vue'
