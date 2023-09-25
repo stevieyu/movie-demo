@@ -1,6 +1,12 @@
 import {H} from 'https://s.stevie.top/esm.sh/highlight.run@7.5.3?bundle';
 
-// https://app.highlight.io/14116/sessions
+/*
+https://app.highlight.io/14116/sessions
+每月 500 次会话
+每月 1,000 次错误
+每月 1,000,000 条日志
+无限 seats
+ */
 H.init('7e3vp5qg', {
   environment: 'production',
   version: 'commit:abcdefg12345',
