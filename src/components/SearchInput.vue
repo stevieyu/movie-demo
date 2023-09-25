@@ -9,8 +9,12 @@
         <v-text-field v-model="form.wd" clearable label="关键词" />
         <v-chip-group filter v-model="form.c">
           <template v-for="i in categories.filter(i=>!+i.pid)" :key="i.id">
-            <v-chip :value="i.id" size="x-small">{{i.name}}</v-chip>
-            <v-chip :value="ii.id" size="x-small" v-for="ii in categories.filter(ii=>ii.pid === i.id)" :data-id="ii.id" :key="ii.id">{{ii.name}}</v-chip>
+            <v-chip :value="i.id" size="small">
+              {{i.name}}
+            </v-chip>
+            <v-chip :value="ii.id" size="small" v-for="ii in categories.filter(ii=>ii.pid === i.id)" :data-id="ii.id" :key="ii.id">
+              {{ii.name}}
+            </v-chip>
             <v-divider></v-divider>
           </template>
         </v-chip-group>
