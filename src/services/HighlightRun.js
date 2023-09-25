@@ -1,4 +1,6 @@
-import {H} from 'https://s.stevie.top/esm.sh/highlight.run@7.5.3?bundle';
+// import {H} from 'https://s.stevie.top/esm.sh/highlight.run@7.5.3?bundle';
+import 'https://cdn.jsdelivr.net/npm/highlight.run@7.5.3/dist/index.umd.min.js'
+const {H} = window
 
 /*
 https://app.highlight.io/14116/sessions
