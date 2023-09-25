@@ -57,7 +57,18 @@ onMounted(() => {
     live: false,
     token: 'Ta-XNIdZg',
     trackerZone: 'hk',
-    swFile: '/worker-swarmcloud.js'
+    swFile: '/worker-swarmcloud.js',
+    getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
+      const total = totalHTTPDownloaded + totalP2PDownloaded;
+      const stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
+      console.log(stats)
+    },
+    getPeerId (peerId) {
+      console.log('peerId: ', peerId)
+    },
+    getPeersInfo (peers) {
+      console.log('peersInfo: ' + peers)
+    }
   })
   engine.registerServiceWorker().finally(() => {
     player.playlist([

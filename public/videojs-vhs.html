@@ -23,7 +23,9 @@
   });
   //https://swarmcloud.net/cn/views/hls-de/API.html#p2penginehls-api
   const engine = new P2PEngineHls({
+    // logLevel: 'debug',
     live: false,
+    sharePlaylist: true,
     token: 'Ta-XNIdZg',
     trackerZone: 'hk',
     swFile: '/worker-swarmcloud.js',
