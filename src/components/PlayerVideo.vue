@@ -1,7 +1,7 @@
 <template>
   <div style="display: flex;flex-direction: column;max-height: 100%;">
     <video-js ref="videoPlayerEl" class="video-js vjs-big-play-centered vjs-fluid" />
-    <pre>{{peer}}</pre>
+    <pre style="white-space: break-spaces;">{{peer}}</pre>
     <div class="vjs-playlist" ref="playlistEl" style="overflow: auto;flex: auto;"></div>
   </div>
 </template>
