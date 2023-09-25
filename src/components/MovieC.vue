@@ -1,10 +1,10 @@
 <template>
-  <v-progress-linear color="primary" indeterminate v-if="loading || proxyLoading"/>
+  <v-progress-linear color="primary" indeterminate v-if="loading"/>
   <PlayerVideo :playlist="playUrl" v-if="playUrl.length"/>
 </template>
 
 <script setup>
-import {computed, reactive, ref, watch} from 'vue'
+import {computed, ref, watch} from 'vue'
 import {useQuery} from '@vue/apollo-composable'
 import PlayerVideo from './PlayerVideo.vue'
 import gql from 'graphql-tag'
@@ -16,7 +16,6 @@ const props = defineProps({
     required: true
   }
 })
-
 
 const {result, loading} = useQuery(gql`
 query($ids: [String!], $url: URL!){
@@ -66,18 +65,6 @@ const video = computed(() => {
     })
   }
   return video
-})
-
-const proxyVariables = reactive({
-  url: ''
-})
-const proxyEnabled = ref(false)
-const {onResult, loading: proxyLoading} = useQuery(gql`
-query($url: URL!){
-  proxy(url: $url, type: base64)
-}
-  `, proxyVariables, {
-  enabled: proxyEnabled
 })
 
 
