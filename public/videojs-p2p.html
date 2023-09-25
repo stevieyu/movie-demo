@@ -29,17 +29,17 @@
   if (p2pml.hlsjs.Engine.isSupported()) {
     //https://github.com/Novage/p2p-media-loader/blob/master/FAQ.md
     var engine = new p2pml.hlsjs.Engine({
-      // loader: {
-      //   trackerAnnounce: [
-      //     "wss://bittorrent-tracker.zeabur.app",
-      //   ],
-      //   rtcConfig: {
-      //     iceServers: [
-      //       { urls: "stun:stun.l.google.com:19302" },
-      //       { urls: "stun:global.stun.twilio.com:3478?transport=udp" }
-      //     ]
-      //   }
-      // }
+      loader: {
+        trackerAnnounce: [
+          "wss://bittorrent-tracker.zeabur.app",
+        ],
+        rtcConfig: {
+          iceServers: [
+            { urls: "stun:stun.l.google.com:19302" },
+            { urls: "stun:global.stun.twilio.com:3478?transport=udp" }
+          ]
+        }
+      }
     });
 
     engine.on("peer_connect", peer => console.log("peer_connect", peer.id, peer.remoteAddress));
