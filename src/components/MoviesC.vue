@@ -34,7 +34,7 @@ const $router = useRouter()
 const variables = reactive({
   pg: 1,
   url,
-  c: 0,
+  c: 34,
   wd: '',
   ...Object.fromEntries((new URLSearchParams(location.search)))
 })
