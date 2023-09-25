@@ -21,7 +21,7 @@
       vhs: {}
     }
   });
-  //https://github.com/swarm-cloud/hls-p2p-engine/blob/main/demo/videojs-vhs.html
+  //https://swarmcloud.net/cn/views/hls-de/API.html#p2penginehls-api
   const engine = new P2PEngineHls({
     live: false,
     token: 'Ta-XNIdZg',
@@ -32,7 +32,14 @@
       const stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
       console.log(stats)
     },
+    getPeerId (peerId) {
+      console.log('peerId: ', peerId)
+    },
+    getPeersInfo (peers) {
+      console.log('peersInfo: ' + peers)
+    }
   })
+  //https://github.com/swarm-cloud/hls-p2p-engine/blob/main/demo/videojs-vhs.html
   engine.registerServiceWorker().finally(() => {
     player.src(
       (new URLSearchParams(location.search)).get('src')
