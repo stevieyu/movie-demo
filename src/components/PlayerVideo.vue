@@ -55,8 +55,8 @@ onMounted(() => {
   const engine = new P2PEngineHls({
     // logLevel: 'debug',
     live: false,
-    token: 'Ta-XNIdZg',
-    trackerZone: 'hk',
+    // token: 'Ta-XNIdZg',
+    // trackerZone: 'hk',
     swFile: '/worker-swarmcloud.js',
     getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
       const total = totalHTTPDownloaded + totalP2PDownloaded;
