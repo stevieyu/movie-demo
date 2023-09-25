@@ -1,13 +1,16 @@
 const randomImport = {
+  HighlightRun: () => import('./HighlightRun'),
   // HyperDX: () => import('./HyperDX'), //影响graphql请求
-  HighlightRun: () => import('./HighlightRun')
 }
 
-let randomIndex = sessionStorage.getItem('services-idx')
-if(!randomIndex) {
-  randomIndex = Math.floor(Math.random() * Object.keys(randomImport).length);
-  sessionStorage.setItem('services-idx', randomIndex)
+let importKey = sessionStorage.getItem('services-idx')
+let importKeys = Object.keys(randomImport);
+if(!importKey) {
+  importKey = importKeys[Math.floor(Math.random() * importKeys.length)]
+  sessionStorage.setItem('services-idx', importKey)
+}else if(!randomImport[importKey]){
+  importKey = importKeys[0]
 }
-if(!location.port) Object.values(randomImport)[randomIndex]();
+if(!location.port) randomImport[importKey]();
 
 
