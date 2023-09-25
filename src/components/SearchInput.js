@@ -1,5 +1,5 @@
 import {reactive} from "vue";
 
 export const dialog = reactive({
-  show: true
+  show: false
 })

@@ -1,5 +1,4 @@
 <template>
-  <search-input @submit="searchSubmit" />
   <v-progress-linear color="primary" indeterminate v-if="loading"/>
 <v-virtual-scroll
     max-height="100%"
@@ -20,6 +19,7 @@
     </template>
 </v-virtual-scroll>
   <v-alert v-if="error" closable :text="error.message" type="error" variant="tonal"/>
+  <search-input @submit="searchSubmit" />
 </template>
 <script setup>
 import {computed, reactive, ref, watch} from 'vue'
