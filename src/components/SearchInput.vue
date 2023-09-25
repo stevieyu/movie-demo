@@ -43,12 +43,10 @@ import {computed, reactive} from "vue";
 import {useQuery} from "@vue/apollo-composable";
 import gql from "graphql-tag";
 import {url} from "@/config/vod";
+import {dialog} from "./SearchInput";
 
 const emit = defineEmits(['submit'])
 
-const dialog = reactive({
-  show: true
-})
 const form = reactive({
   wd: '',
   c: '',

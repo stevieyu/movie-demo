@@ -5,4 +5,4 @@ export const url = [
   'https://jiguang.pro/api.php/provide/vod/',// 开头文字广告,待去掉
   'https://api.haiwaikan.com/v1/vod',
   'https://kuaikan-api.com/api.php/provide/vod/'
-][2]
+][Math.floor(Math.random() * 2)]
