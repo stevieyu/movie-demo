@@ -44,9 +44,10 @@
   })
   //https://github.com/swarm-cloud/hls-p2p-engine/blob/main/demo/videojs-vhs.html
   engine.registerServiceWorker().finally(() => {
-    player.src(
-      (new URLSearchParams(location.search)).get('src')
+    player.src({
+      src: (new URLSearchParams(location.search)).get('src')
       || 'https://test-streams.mux.dev/x36xhzz/url_8/193039199_mp4_h264_aac_fhd_7.m3u8'
-    )
+      type: 'application/x-mpegURL'
+    })
   })
 </script>
