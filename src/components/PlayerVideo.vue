@@ -1,11 +1,12 @@
 <template>
   <div style="display: flex;flex-direction: column;max-height: 100%;">
     <video-js ref="videoPlayerEl" class="video-js vjs-big-play-centered vjs-fluid" />
+    <pre>{{peer}}</pre>
     <div class="vjs-playlist" ref="playlistEl" style="overflow: auto;flex: auto;"></div>
   </div>
 </template>
 <script setup>
-import {onMounted, onBeforeUnmount, ref} from 'vue'
+import {onMounted, onBeforeUnmount, ref, reactive} from 'vue'
 
 const props = defineProps({
   playlist: {
@@ -51,6 +52,8 @@ const videoPlayerDefaultOptions = {
 //   );
 // }
 
+const peer = reactive({})
+
 let player;
 onMounted(() => {
   player = videojs(
@@ -64,21 +67,20 @@ onMounted(() => {
   );
 
   const engine = new P2PEngineHls({
-    logLevel: true,
+    // logLevel: true,
     live: false,
     // token: 'Ta-XNIdZg',
     // trackerZone: 'hk',
     swFile: '/worker-swarmcloud.js',
     getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
       const total = totalHTTPDownloaded + totalP2PDownloaded;
-      const stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
-      console.log(stats)
+      peer.stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
     },
-    getPeerId (peerId) {
-      console.log('peerId: ', peerId)
+    getPeerId (id) {
+      peer.id = id
     },
-    getPeersInfo (peers) {
-      console.log('peersInfo: ' + peers)
+    getPeersInfo (info) {
+      peer.info = info
     }
   })
   engine.registerServiceWorker().finally(() => {
