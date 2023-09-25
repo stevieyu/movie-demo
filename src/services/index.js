@@ -1,5 +1,5 @@
 const randomImport = {
-  // HyperDX: () => import('./HyperDX'),
+  // HyperDX: () => import('./HyperDX'), //影响graphql请求
   HighlightRun: () => import('./HighlightRun')
 }
 
