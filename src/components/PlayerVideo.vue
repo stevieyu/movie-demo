@@ -39,6 +39,17 @@ const videoPlayerDefaultOptions = {
   }
 }
 
+// function dataUrlToObjectUrl(dataUrl) {
+//   if(!/^data:/.test(dataUrl)) return dataUrl
+//   const byteString = atob(dataUrl.replace(/^.*?,/, ''));
+//   const uint8Array = (new Uint8Array(new ArrayBuffer(byteString.length)))
+//     .map((i, idx) => byteString.charCodeAt(idx));
+//
+//   return URL.createObjectURL(
+//     new Blob([uint8Array],
+//       { type: dataUrl.replace(/^data:(.*?)[;,].*$/, '$1') })
+//   );
+// }
 
 let player;
 onMounted(() => {
@@ -53,7 +64,7 @@ onMounted(() => {
   );
 
   const engine = new P2PEngineHls({
-    // logLevel: 'debug',
+    logLevel: true,
     live: false,
     // token: 'Ta-XNIdZg',
     // trackerZone: 'hk',

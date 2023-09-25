@@ -80,25 +80,15 @@ query($url: URL!){
   enabled: proxyEnabled
 })
 
-const fetchM3u8 = async (src) => {
-  proxyVariables.url = src
-  return new Promise(resolve => {
-    onResult((rea) => {
-      const proxy = rea?.data?.proxy
-      proxy && resolve(proxy)
-    })
-    proxyEnabled.value = true
-  })
-}
+
 const playUrl = ref([])
 watch(video, async () => {
   const playlist = [];
   for (let {name, src} of video.value?.playUrl || []){
-    src = await fetchM3u8(src)
     playlist.push({
       name,
       sources: [{
-        src,
+        src: src.replace(/:\//, '://hono.dgcf.link'),
         type: 'application/x-mpegURL'
       }],
     })
