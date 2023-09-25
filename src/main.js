@@ -14,7 +14,7 @@ import { createApp } from 'vue'
 import { registerPlugins } from '@/plugins'
 
 //Services
-if(!location.port) import('@/services')
+import '@/services'
 
 window.HELP_IMPROVE_VIDEOJS = false;
 window.__DEV__ = import.meta.env.DEV
