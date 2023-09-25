@@ -1,11 +1,11 @@
 <video-js id="my_video_1" class="vjs-default-skin vjs-big-play-centered vjs-fluid"></video-js>
-<link href="https://s.stevie.top/fastly.jsdelivr.net/npm/video.js@8/dist/video-js.min.css" rel="stylesheet">
-<script src="https://s.stevie.top/fastly.jsdelivr.net/npm/video.js@8/dist/video.min.js"></script>
+<link href="https://unpkg.com/video.js@8.6.0/dist/video-js.min.css" rel="stylesheet" />
+<script src="https://unpkg.com/video.js@8.6.0/dist/video.min.js"></script>
 <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/video.js@8/dist/lang/zh-Hans.min.js"></script>
-<script src="https://s.stevie.top/fastly.jsdelivr.net/npm/swarmcloud-hls@latest/dist/p2p-engine.min.js"></script>
+<script src="https://unpkg.com/swarmcloud-hls@2.8.4/dist/p2p-engine.min.js"></script>
 <script type="module">
   const src = (new URLSearchParams(location.search)).get('src')
-    || 'https://test-streams.mux.dev/x36xhzz/url_8/193039199_mp4_h264_aac_fhd_7.m3u8'
+    || 'https://hono.dgcf.link/s5.bfzycdn.com/video/feichangxiaotewudajuezhan/HD/index.m3u8'
 
   //https://www.cdnbye.com/oms/#/user/liveDataGlobal
   const player = videojs('my_video_1', {
