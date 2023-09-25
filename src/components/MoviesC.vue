@@ -22,7 +22,7 @@
   <v-alert v-if="error" closable :text="error.message" type="error" variant="tonal"/>
 </template>
 <script setup>
-import {reactive, ref, watch} from 'vue'
+import {computed, reactive, ref, watch} from 'vue'
 import {useRouter} from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
@@ -35,7 +35,8 @@ const variables = reactive({
   pg: 1,
   url,
   c: 0,
-  wd: ''
+  wd: '',
+  ...Object.fromEntries((new URLSearchParams(location.search)))
 })
 const { result, loading, error } = useQuery(gql`
 query($pg: Int!, $c: Int, $wd: String, $url: URL!){
@@ -50,17 +51,21 @@ query($pg: Int!, $c: Int, $wd: String, $url: URL!){
     }
   }
 }
-`, variables)
+`, computed(() =>
+  Object.fromEntries(
+    Object.entries(variables).map(([k, v]) =>
+      [k, 'pg,c'.includes(k) ? +v : v]
+    )
+  )
+))
 
 const movies = ref([])
 watch(result, () => {
   const _movies = result.value?.movies || []
-  if(_movies.length) {
-    if(variables.pg === 1) {
-      movies.value = _movies
-    }else{
-      movies.value.push(..._movies)
-    }
+  if(variables.pg === 1) {
+    movies.value = [..._movies]
+  }else{
+    movies.value.push(..._movies)
   }
 
   // console.log('watchEffect: ', movies.value)
@@ -71,6 +76,9 @@ watch(result, () => {
 const searchSubmit = (from) => {
   from = Object.fromEntries(Object.entries(from).filter(([,v])=> v))
   Object.assign(variables, from, {pg: 1})
+  $router.replace({
+    query: from
+  })
 }
 
 const loadMore = (_pg = null) => {

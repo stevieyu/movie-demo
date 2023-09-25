@@ -9,18 +9,23 @@
         <template v-slot:text>
         <v-text-field v-model="form.wd" clearable label="关键词" />
         <v-chip-group filter v-model="form.c">
-          <v-chip :value="i.id" v-for="i in categories" :key="i.id">{{i.name}}</v-chip>
+          <template v-for="i in categories.filter(i=>!+i.pid)" :key="i.id">
+            <v-chip :value="i.id">{{i.name}}</v-chip>
+            <v-chip :value="ii.id" v-for="ii in categories.filter(ii=>ii.pid === i.id)" :data-id="ii.id" :key="ii.id">{{ii.name}}</v-chip>
+            <v-divider></v-divider>
+          </template>
         </v-chip-group>
         </template>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue-darken-1"
-            variant="text"
-            @click="dialog.show = false"
-          >
-            关闭
-          </v-btn>
+          <v-spacer>
+            <v-btn
+              color="blue-darken-1"
+              variant="text"
+              @click="dialog.show = false"
+            >
+              关闭
+            </v-btn>
+          </v-spacer>
           <v-btn
             color="blue-darken-1"
             variant="text"
@@ -47,7 +52,9 @@ const dialog = reactive({
 const form = reactive({
   wd: '',
   c: '',
+  ...Object.fromEntries((new URLSearchParams(location.search)))
 })
+
 const submit = () => {
   dialog.show = false
   emit('submit', form)
@@ -62,6 +69,12 @@ const { result } = useQuery(gql`
       }
     }
     `, {url})
-const categories = computed(() => result.value?.categories || [])
+const categories = computed(() =>
+  (result.value?.categories || []).map(i => ({
+    ...i,
+    id: i.id + '',
+    pid: i.pid + ''
+  }))
+)
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex;flex-direction: column;max-height: 100%;">
-    <video ref="videoPlayerEl" class="video-js vjs-big-play-centered vjs-fluid"></video>
+    <video-js ref="videoPlayerEl" class="video-js vjs-big-play-centered vjs-fluid" />
     <div class="vjs-playlist" ref="playlistEl" style="overflow: auto;flex: auto;"></div>
   </div>
 </template>
@@ -17,7 +17,7 @@ const props = defineProps({
 const videoPlayerEl = ref(null)
 const playlistEl = ref(null)
 
-const {videojs} = window
+const {videojs, P2PEngineHls} = window
 
 // https://videojs.com/guides/options/
 const videoPlayerDefaultOptions = {
@@ -30,6 +30,11 @@ const videoPlayerDefaultOptions = {
       "Now Playing": "正在播放",
       "Up Next": "播放下一个",
       "Untitled Video": "无标题视频"
+    }
+  },
+  html5: {
+    //https://github.com/videojs/http-streaming#list
+    vhs: {
     }
   }
 }
@@ -46,20 +51,30 @@ onMounted(() => {
       //   player.log('onPlayerReady');
     }
   );
-  player.playlist([
-    // {
-    //     name: '第一集',
-    //     sources: [{
-    //         src: 'https://s5.bfzycdn.com/video/lanman/第77集/index.m3u8',
-    //         type: 'application/x-mpegURL'
-    //     }],
-    // }
-    ...props.playlist
-  ].filter(i => Array.isArray(i.sources) && i.sources.filter(i => i.src).length));
 
-  player.playlistUi({
-    el: playlistEl.value
-  });
+  const engine = new P2PEngineHls({
+    // logLevel: 'debug',
+    live: false,
+    token: 'Ta-XNIdZg',
+    trackerZone: 'hk',
+    swFile: '/worker-swarmcloud.js'
+  })
+  engine.registerServiceWorker().finally(() => {
+    player.playlist([
+      // {
+      //     name: '第一集',
+      //     sources: [{
+      //         src: 'https://s5.bfzycdn.com/video/lanman/第77集/index.m3u8',
+      //         type: 'application/x-mpegURL'
+      //     }],
+      // }
+      ...props.playlist
+    ].filter(i => Array.isArray(i.sources) && i.sources.filter(i => i.src).length));
+    player.playlistUi({
+      el: playlistEl.value
+    });
+  })
+
 })
 onBeforeUnmount(() => {
   player && player.dispose()

@@ -1,0 +1,42 @@
+<video-js id="my_video_1" class="vjs-default-skin vjs-big-play-centered vjs-fluid"></video-js>
+<link href="https://s.stevie.top/fastly.jsdelivr.net/npm/video.js@8/dist/video-js.min.css" rel="stylesheet">
+<script src="https://s.stevie.top/fastly.jsdelivr.net/npm/video.js@8/dist/video.min.js"></script>
+<script src="https://s.stevie.top/fastly.jsdelivr.net/npm/video.js@8/dist/lang/zh-Hans.min.js"></script>
+<script src="https://s.stevie.top/fastly.jsdelivr.net/npm/swarmcloud-hls@latest/dist/p2p-engine.min.js"></script>
+<script type="module">
+  const player = videojs('my_video_1', {
+    autoplay: false,
+    controls: true,
+    playbackRates: [0.5, 1, 1.5, 2, 3, 4, 5],
+    language: 'zh-Hans',
+    languages: {
+      'zh-Hans': {
+        "Now Playing": "正在播放",
+        "Up Next": "播放下一个",
+        "Untitled Video": "无标题视频"
+      }
+    },
+    html5: {
+      //https://github.com/videojs/http-streaming#list
+      vhs: {}
+    }
+  });
+  //https://github.com/swarm-cloud/hls-p2p-engine/blob/main/demo/videojs-vhs.html
+  const engine = new P2PEngineHls({
+    live: false,
+    token: 'Ta-XNIdZg',
+    trackerZone: 'hk',
+    swFile: '/worker-swarmcloud.js',
+    getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
+      const total = totalHTTPDownloaded + totalP2PDownloaded;
+      const stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
+      console.log(stats)
+    },
+  })
+  engine.registerServiceWorker().finally(() => {
+    player.src(
+      (new URLSearchParams(location.search)).get('src')
+      || 'https://test-streams.mux.dev/x36xhzz/url_8/193039199_mp4_h264_aac_fhd_7.m3u8'
+    )
+  })
+</script>

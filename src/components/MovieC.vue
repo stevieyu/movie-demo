@@ -105,6 +105,8 @@ watch(video, async () => {
   }
   playUrl.value = playlist;
   // console.log('playUrl', playUrl.value)
+}, {
+  immediate: true,
 })
 
 </script>
