@@ -98,6 +98,7 @@ onMounted(() => {
     player.playlistUi({
       el: playlistEl.value
     });
+    player.landscapeFullscreen();
   })
 
 })
