@@ -59,7 +59,7 @@ query($ids: [String!], $url: URL!){
 const video = computed(() => {
   const video = {...(result.value?.movies[0] || {})}
   if (video && video.playUrl) {
-    video.playUrl = video.playUrl.split('#').map(i => {
+    video.playUrl = video.playUrl.replace(/.*[$]{3}/, '').split('#').map(i => {
       i = i.split('$')
       return {name: i[0], src: i[1]}
     })
@@ -72,10 +72,12 @@ const playUrl = ref([])
 watch(video, async () => {
   const playlist = [];
   for (let {name, src} of video.value?.playUrl || []){
+    //src = src.replace(/:\//, '://hono.dgcf.link')
+    src = 'https://faas-sgp1-18bc02ac.doserverless.co/api/v1/web/fn-41e9df6e-4d4b-4032-8fb2-e91907859969/default/cors-php' + src.replace(/https?:\//, '');
     playlist.push({
       name,
       sources: [{
-        src: src.replace(/:\//, '://hono.dgcf.link'),
+        src,
         type: 'application/x-mpegURL'
       }],
     })
