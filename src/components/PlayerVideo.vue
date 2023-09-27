@@ -98,6 +98,7 @@ onMounted(() => {
     player.playlistUi({
       el: playlistEl.value
     });
+    // 在移动端根据视频比例选择全屏机制: https://blog.csdn.net/qq_43614372/article/details/129367231
     player.landscapeFullscreen();
   })
 
