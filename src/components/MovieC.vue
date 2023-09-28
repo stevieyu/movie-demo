@@ -1,13 +1,12 @@
 <template>
-  <v-progress-linear color="primary" indeterminate v-if="loading"/>
+  <v-progress-linear color="primary" indeterminate v-if="fetching"/>
   <PlayerVideo :playlist="playUrl" v-if="playUrl.length"/>
 </template>
 
 <script setup>
 import {computed, watch} from 'vue'
-import {useQuery} from '@vue/apollo-composable'
+import { gql, useQuery } from '@urql/vue';
 import PlayerVideo from './PlayerVideo.vue'
-import gql from 'graphql-tag'
 import {url} from "@/config/vod";
 
 const props = defineProps({
@@ -17,7 +16,8 @@ const props = defineProps({
   }
 })
 
-const {result, loading} = useQuery(gql`
+const {data, fetching} = useQuery({
+  query: gql`
 query($ids: [String!], $url: URL!){
   movies(ids: $ids, _url: $url){
     id
@@ -50,13 +50,16 @@ query($ids: [String!], $url: URL!){
     version
   }
 }
-`, {
-  ids: [props.id],
-  url
+`
+  ,
+  variables: {
+    ids: [props.id],
+    url
+  }
 })
 
 
-const video = computed(() => ({...(result.value?.movies[0] || {})}))
+const video = computed(() => ({...(data.value?.movies[0] || {})}))
 
 watch(video, (val) => {
   document.title = val.name

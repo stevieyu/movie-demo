@@ -30,8 +30,7 @@
 </template>
 <script setup>
 import {computed, reactive, ref} from "vue";
-import {useQuery} from "@vue/apollo-composable";
-import gql from "graphql-tag";
+import { gql, useQuery } from '@urql/vue';
 import {url} from "@/config/vod";
 
 const emit = defineEmits(['submit'])
@@ -47,7 +46,8 @@ const submit = () => {
   vepValue.value = []
 }
 
-const { result } = useQuery(gql`
+const { data } = useQuery({
+  query: gql`
     query($url: URL!){
       categories(_url: $url){
         id
@@ -55,9 +55,12 @@ const { result } = useQuery(gql`
         pid
       }
     }
-    `, {url})
+    `,
+  variables: {url}
+})
+
 const categories = computed(() =>
-  (result.value?.categories || []).map(i => ({
+  (data.value?.categories || []).map(i => ({
     ...i,
     id: i.id + '',
     pid: i.pid + ''

@@ -1,5 +1,5 @@
 <template>
-  <v-progress-linear color="primary" indeterminate v-if="loading"/>
+  <v-progress-linear color="primary" indeterminate v-if="fetching"/>
   <v-alert v-if="error" closable :text="error.message" type="error" variant="tonal"/>
   <search-input @submit="searchSubmit" />
   <v-virtual-scroll :items="movies" style="max-height: 100%;">
@@ -12,25 +12,27 @@
           cover
         >
           <v-card-title>{{ item.name }}</v-card-title>
-          <v-card-subtitle class="d-flex flex-column justify-space-between">
-            <div>{{ item.sub }}</div>
-            <div>{{ item.category.name }}</div>
-            <div>{{ item.remarks }}</div>
-            <div>{{item.playFrom}}</div>
-          </v-card-subtitle>
+          <div class="d-flex justify-space-between">
+              <v-card-subtitle class="d-flex flex-column justify-space-between">
+                  <div>{{ item.sub }}</div>
+                  <div>{{ item.category.name }}</div>
+                  <div>{{ item.remarks }}</div>
+                  <div>{{item.playFrom}}</div>
+              </v-card-subtitle>
+              <v-card-actions>
+                  <v-btn
+                          class="ms-2"
+                          icon="mdi-play"
+                          variant="text"
+                  />
+              </v-card-actions>
+          </div>
           <v-card-text>{{ item.content }}</v-card-text>
-          <v-card-actions class="justify-space-between">
-            <div>&nbsp;</div>
-            <v-btn
-              class="ms-2"
-              icon="mdi-play"
-              variant="text"
-            />
-          </v-card-actions>
+
         </v-img>
       </v-card>
       <div class="text-center py-2" v-intersect="loadMore()" v-if="index - 19 >= 0 && movies?.length <= (index + 1)">
-        <v-btn @click="loadMore()" :loading="loading">
+        <v-btn @click="loadMore()" :loading="fetching">
           点击加载更多
         </v-btn>
       </div>
@@ -41,8 +43,7 @@
 import {computed, reactive, ref, watch} from 'vue'
 import {useDebounceFn} from '@vueuse/core'
 import {useRouter} from 'vue-router'
-import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql, useQuery } from '@urql/vue';
 import SearchInput from "@/components/SearchInput.vue";
 import {url} from "@/config/vod";
 
@@ -55,7 +56,9 @@ const variables = reactive({
   wd: '',
   ...Object.fromEntries((new URLSearchParams(location.search)))
 })
-const { result, loading, error } = useQuery(gql`
+
+const {fetching, data, error} = useQuery({
+  query: gql`
 query($pg: Int!, $c: Int, $wd: String, $url: URL!){
   movies(pg: $pg, _url: $url, c: $c, wd: $wd){
     id
@@ -71,17 +74,20 @@ query($pg: Int!, $c: Int, $wd: String, $url: URL!){
     }
   }
 }
-`, computed(() =>
-  Object.fromEntries(
-    Object.entries(variables).map(([k, v]) =>
-      [k, 'pg,c'.includes(k) ? +v : v]
+      `,
+  variables: computed(() =>
+    Object.fromEntries(
+      Object.entries(variables).map(([k, v]) =>
+        [k, 'pg,c'.includes(k) ? +v : v]
+      )
     )
   )
-))
+})
+
 
 const movies = ref([])
-watch(result, () => {
-  const _movies = (result.value?.movies || []).map((i) => {
+watch(data, () => {
+  const _movies = (data.value?.movies || []).map((i) => {
     let {pic} = i
     if(pic) pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
     return {...i, pic}
@@ -106,7 +112,7 @@ const searchSubmit = (from) => {
 }
 
 const loadMore = useDebounceFn((_pg = null) => {
-  if(loading.value) return
+  if(fetching.value) return
   variables.pg = _pg ?? variables.pg+1;
 }, 100)
 </script>
