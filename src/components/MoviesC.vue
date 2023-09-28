@@ -1,28 +1,44 @@
 <template>
   <v-progress-linear color="primary" indeterminate v-if="loading"/>
-<v-virtual-scroll
-    max-height="100%"
-    :items="movies"
->
-    <template v-slot:default="{ item, index }">
-        <v-card :title="item.name" :subtitle="item.remarks" :text="item.playFrom" class="ma-4" v-ripple @click="$router.push(`/videos/${item.id}`)">
-            <v-card-actions class="justify-space-between">
-                <v-btn>{{item.category.name}}</v-btn>
-                <v-btn>播放</v-btn>
-            </v-card-actions>
-        </v-card>
-        <div class="text-center py-2" v-if="index && movies?.length <= (index + 1)">
-          <v-btn @click="loadMore()" :loading="loading">
-          点击加载更多
-        </v-btn>
-        </div>
-    </template>
-</v-virtual-scroll>
   <v-alert v-if="error" closable :text="error.message" type="error" variant="tonal"/>
   <search-input @submit="searchSubmit" />
+  <v-virtual-scroll :items="movies" style="max-height: 100%;">
+    <template v-slot:default="{ item, index }">
+      <v-card class="ma-4" v-ripple @click="$router.push(`/videos/${item.id}`)">
+        <v-img
+          :src="item.pic"
+          class="align-end"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.9)"
+          cover
+        >
+          <v-card-title>{{ item.name }}</v-card-title>
+          <v-card-subtitle class="d-flex justify-space-between">
+            <div>{{ item.category.name }}</div>
+            <div>{{ item.remarks }}</div>
+            <div>{{ item.sub }}</div>
+          </v-card-subtitle>
+          <v-card-text>{{ item.content }}</v-card-text>
+          <v-card-actions class="justify-space-between">
+            <div>{{item.playFrom}}</div>
+            <v-btn
+              class="ms-2"
+              icon="mdi-play"
+              variant="text"
+            />
+          </v-card-actions>
+        </v-img>
+      </v-card>
+      <div class="text-center py-2" v-intersect="loadMore()" v-if="index - 19 >= 0 && movies?.length <= (index + 1)">
+        <v-btn @click="loadMore()" :loading="loading">
+          点击加载更多
+        </v-btn>
+      </div>
+    </template>
+  </v-virtual-scroll>
 </template>
 <script setup>
 import {computed, reactive, ref, watch} from 'vue'
+import {useDebounceFn} from '@vueuse/core'
 import {useRouter} from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
@@ -43,7 +59,10 @@ query($pg: Int!, $c: Int, $wd: String, $url: URL!){
   movies(pg: $pg, _url: $url, c: $c, wd: $wd){
     id
     name
+    sub
     remarks
+    pic
+    content
     playFrom
     category{
       id
@@ -61,9 +80,13 @@ query($pg: Int!, $c: Int, $wd: String, $url: URL!){
 
 const movies = ref([])
 watch(result, () => {
-  const _movies = result.value?.movies || []
+  const _movies = (result.value?.movies || []).map((i) => {
+    let {pic} = i
+    if(pic) pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
+    return {...i, pic}
+  })
   if(variables.pg === 1) {
-    movies.value = [..._movies]
+    movies.value = _movies
   }else{
     movies.value.push(..._movies)
   }
@@ -81,7 +104,8 @@ const searchSubmit = (from) => {
   })
 }
 
-const loadMore = (_pg = null) => {
+const loadMore = useDebounceFn((_pg = null) => {
+  if(loading.value) return
   variables.pg = _pg ?? variables.pg+1;
-}
+}, 100)
 </script>

@@ -98,8 +98,16 @@ onMounted(() => {
     player.playlistUi({
       el: playlistEl.value
     });
+    // https://github.com/prateekrastogi/videojs-landscape-fullscreen
     // 在移动端根据视频比例选择全屏机制: https://blog.csdn.net/qq_43614372/article/details/129367231
-    player.landscapeFullscreen();
+    player.landscapeFullscreen({
+      fullscreen: {
+        enterOnRotate: true, // 横向旋转设备时进入全屏模式
+        exitOnRotate: true, // 纵向旋转设备时退出全屏模式
+        alwaysInLandscapeMode: true, // 始终以横向模式进入全屏模式，即使设备处于纵向模式
+        iOS: true //是否在iOS上使用假全屏（显示播放器控件而不是系统控件需要）
+      }
+    });
   })
 
 })

@@ -4,7 +4,7 @@
 </template>
 
 <script setup>
-import {computed, ref, watch} from 'vue'
+import {computed, watch} from 'vue'
 import {useQuery} from '@vue/apollo-composable'
 import PlayerVideo from './PlayerVideo.vue'
 import gql from 'graphql-tag'
@@ -57,6 +57,10 @@ query($ids: [String!], $url: URL!){
 
 
 const video = computed(() => ({...(result.value?.movies[0] || {})}))
+
+watch(video, (val) => {
+  document.title = val.name
+}, {immediate: true})
 
 const playUrl = computed(() => (video.value?.playUrl?.match(/([^$#]+)\$(http[^$#]+m3u8)/g) || [])
   .map((i) => {

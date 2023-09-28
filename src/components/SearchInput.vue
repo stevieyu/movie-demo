@@ -1,11 +1,8 @@
 <template>
-  <v-bottom-sheet
-    v-if="dialog.show"
-    style="position: sticky;bottom: 0;left: 0;"
-  >
-    <v-form validate-on="submit lazy" @submit.prevent="submit">
-      <v-card>
-        <template v-slot:text>
+  <v-expansion-panels variant="popout" class="mt-1" v-model="vepValue">
+    <v-expansion-panel title="搜索" value="search">
+      <v-expansion-panel-text>
+      <v-form validate-on="submit lazy" @submit.prevent="submit">
         <v-text-field v-model="form.wd" clearable label="关键词" />
         <v-chip-group filter v-model="form.c">
           <template v-for="i in categories.filter(i=>!+i.pid)" :key="i.id">
@@ -18,38 +15,27 @@
             <v-divider></v-divider>
           </template>
         </v-chip-group>
-        </template>
-        <v-card-actions>
-          <v-spacer>
-            <v-btn
-              color="blue-darken-1"
-              variant="text"
-              @click="dialog.show = false"
-            >
-              关闭
-            </v-btn>
-          </v-spacer>
-          <v-btn
-            color="blue-darken-1"
-            variant="text"
-            @click="submit"
-          >
+        <div class="d-flex justify-space-between">
+          <v-btn color="blue-darken-1" variant="text" @click="vepValue=[]">
+            关闭
+          </v-btn>
+          <v-btn color="blue-darken-1" variant="text" @click="submit">
             提交
           </v-btn>
-        </v-card-actions>
-      </v-card>
+        </div>
     </v-form>
-  </v-bottom-sheet>
+      </v-expansion-panel-text>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 <script setup>
-import {computed, reactive} from "vue";
+import {computed, reactive, ref} from "vue";
 import {useQuery} from "@vue/apollo-composable";
 import gql from "graphql-tag";
 import {url} from "@/config/vod";
-import {dialog} from "./SearchInput";
 
 const emit = defineEmits(['submit'])
-
+const vepValue = ref([])
 const form = reactive({
   wd: '',
   c: '',
@@ -57,8 +43,8 @@ const form = reactive({
 })
 
 const submit = () => {
-  dialog.show = false
   emit('submit', form)
+  vepValue.value = []
 }
 
 const { result } = useQuery(gql`
