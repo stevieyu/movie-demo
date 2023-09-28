@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@urql/vue": "^1.1.2",
+    "@urql/exchange-graphcache": "^6.3.3",
     "@mdi/font": "^7.2.96",
     "@vueuse/core": "^10.4.1",
     "graphql": "^16.8.1",
