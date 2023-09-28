@@ -12,14 +12,14 @@
           cover
         >
           <v-card-title>{{ item.name }}</v-card-title>
-          <v-card-subtitle class="d-flex justify-space-between">
+          <v-card-subtitle class="d-flex flex-column justify-space-between">
+            <div>{{ item.sub }}</div>
             <div>{{ item.category.name }}</div>
             <div>{{ item.remarks }}</div>
-            <div>{{ item.sub }}</div>
+            <div>{{item.playFrom}}</div>
           </v-card-subtitle>
           <v-card-text>{{ item.content }}</v-card-text>
           <v-card-actions class="justify-space-between">
-            <div>{{item.playFrom}}</div>
             <v-btn
               class="ms-2"
               icon="mdi-play"
