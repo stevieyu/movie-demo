@@ -8,4 +8,4 @@ export const url = [
   'https://cj.lziapi.com/api.php/provide/vod/',
   'https://api.haiwaikan.com/v1/vod',
   'https://kuaikan-api.com/api.php/provide/vod/'
-][5]
+][0]
