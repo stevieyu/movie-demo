@@ -20,6 +20,7 @@
           </v-card-subtitle>
           <v-card-text>{{ item.content }}</v-card-text>
           <v-card-actions class="justify-space-between">
+            <div>&nbsp;</div>
             <v-btn
               class="ms-2"
               icon="mdi-play"
