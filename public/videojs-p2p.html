@@ -10,7 +10,14 @@
 <script src="https://unpkg.com/video.js@7.21.5/dist/video.min.js"></script>
 
 <script src="https://unpkg.com/videojs-contrib-hls.js@3.2.0/dist/videojs-contrib-hlsjs.min.js"></script>
-
+<style>
+    .video-js *:focus-visible{
+        outline: none;
+    }
+    .vjs-menu li.vjs-menu-item:focus{
+        background-color: transparent !important;
+    }
+</style>
 <script type="module">
   const src = (new URLSearchParams(location.search)).get('src')
     || 'https://pptv.1080tg.com/202309/22/riJyehH5nR3/video/index.m3u8'
