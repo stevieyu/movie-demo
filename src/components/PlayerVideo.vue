@@ -24,6 +24,7 @@ const {videojs, P2PEngineHls} = window
 const videoPlayerDefaultOptions = {
   autoplay: false,
   controls: true,
+  preload: 'auto',
   playbackRates: [0.5, 1, 1.5, 2, 3, 4, 5],
   language: 'zh-Hans',
   languages: {

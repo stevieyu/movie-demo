@@ -13,7 +13,6 @@
     "@urql/exchange-graphcache": "^6.3.3",
     "@mdi/font": "^7.2.96",
     "@vueuse/core": "^10.4.1",
-    "graphql": "^16.8.1",
     "pinia": "^2.1.6",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5",

@@ -62,7 +62,7 @@ query($ids: [String!], $url: URL!){
 const video = computed(() => ({...(data.value?.movies[0] || {})}))
 
 watch(video, (val) => {
-  document.title = val.name
+  val.name && (document.title = val.name)
 }, {immediate: true})
 
 const playUrl = computed(() => (video.value?.playUrl?.match(/([^$#]+)\$(http[^$#]+m3u8)/g) || [])

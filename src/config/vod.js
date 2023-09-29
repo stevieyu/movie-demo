@@ -6,8 +6,8 @@ export const url = [
   'http://cj.lziapi.com/api.php/provide/vod/',
   'http://cj.ffzyapi.com/api.php/provide/vod/',
   'http://suoniapi.com/api.php/provide/vod/',
-  'http://kuakezy1.com/api.php/provide/vod/',
-  'http://jiguang.pro/api.php/provide/vod/',// 开头文字广告
+  'http://kuakezy1.com/api.php/provide/vod/',// 随机广告,播放不能代理
+  'http://jiguang.pro/api.php/provide/vod/',// 开头广告
   'https://api.haiwaikan.com/v1/vod',
   'https://kuaikan-api.com/api.php/provide/vod/'
-][5]
+][0]
