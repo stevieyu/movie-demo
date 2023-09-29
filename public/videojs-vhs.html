@@ -87,5 +87,14 @@
       src: dataUrlToObjectUrl(src),
       type: 'application/x-mpegURL'
     })
+
+    addEventListener('beforeunload', () => {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          if(!registration.active.scriptURL.includes(engine.realEngine.config.swFile)) continue;
+          registration.unregister();
+        }
+      });
+    });
   })
 </script>
