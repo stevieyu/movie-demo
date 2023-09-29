@@ -71,7 +71,7 @@ onMounted(() => {
     // logLevel: true,
     live: false,
     // token: 'Ta-XNIdZg',
-    sharePlaylist: true,
+    // sharePlaylist: true,
     trackerZone: 'hk',
     swFile: '/worker-swarmcloud.js',
     getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
