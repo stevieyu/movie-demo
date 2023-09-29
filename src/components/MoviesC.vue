@@ -88,9 +88,10 @@ query($pg: Int!, $c: Int, $wd: String, $url: URL!){
 const movies = ref([])
 watch(data, () => {
   const _movies = (data.value?.movies || []).map((i) => {
-    let {pic} = i
+    let {pic, content} = i
+    if(content) content = content.replace(/<[^>]*>/g, '').replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
     if(pic) pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
-    return {...i, pic}
+    return {...i, pic, content}
   })
   if(variables.pg === 1) {
     movies.value = _movies
