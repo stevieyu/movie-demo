@@ -1,4 +1,7 @@
-<video-js id="my_video_1" class="vjs-default-skin vjs-big-play-centered vjs-fluid" />
+<div>
+    <video-js id="my_video_1" class="vjs-default-skin vjs-big-play-centered vjs-fluid" />
+</div>
+<div id="logs"></div>
 <link href="https://s.stevie.top/fastly.jsdelivr.net/npm/video.js@8.6.0/dist/video-js.min.css" rel="stylesheet" />
 <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/video.js@8.6.0/dist/video.min.js"></script>
 <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/video.js@8/dist/lang/zh-Hans.min.js"></script>
@@ -26,6 +29,7 @@
       vhs: {}
     }
   });
+  const logs = (...args) => document.querySelector('#logs').innerHTML += `<div>${args.join(' ')}</div>`;
   //https://swarmcloud.net/cn/views/hls-de/API.html#p2penginehls-api
   const engine = new P2PEngineHls({
     // logLevel: 'debug',
@@ -43,13 +47,13 @@
     getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
       const total = totalHTTPDownloaded + totalP2PDownloaded;
       const stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
-      console.log(stats)
+      logs(stats)
     },
     getPeerId (peerId) {
-      console.log('peerId: ', peerId)
+      logs('peerId: ', peerId)
     },
     getPeersInfo (peers) {
-      console.log('peersInfo: ' + peers)
+      logs('peersInfo: ' + peers)
     }
   })
   function dataUrlToObjectUrl(dataUrl) {
