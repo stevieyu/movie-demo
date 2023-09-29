@@ -54,8 +54,12 @@
     swFile: '/worker-swarmcloud.js',
     webRTCConfig: {
       iceServers: [
-        { urls: [ 'stun:stun.hitv.com:3478',
-            'stun:ss-turn2.xirsys.com',] }
+        { urls: [
+            'stun:stun.hitv.com',
+            'stun:stun.qqlive.qq.com',
+            'stun:stun.qq.com',
+            'stun:stun.vincross.com',
+          ] }
       ]
     },
     getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
