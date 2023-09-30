@@ -74,16 +74,6 @@ onMounted(() => {
     // sharePlaylist: true,
     trackerZone: 'hk',
     swFile: '/worker-swarmcloud.js',
-    webRTCConfig: {
-      iceServers: [
-        { urls: [
-            'stun:stun.hitv.com',
-            'stun:stun.qqlive.qq.com',
-            'stun:stun.qq.com',
-            'stun:stun.vincross.com',
-          ] }
-      ]
-    },
     getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
       const total = totalHTTPDownloaded + totalP2PDownloaded;
       peer.stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`

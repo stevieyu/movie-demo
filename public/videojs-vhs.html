@@ -8,8 +8,8 @@
 <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/video.js@8/dist/lang/zh-Hans.min.js"></script>
 <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/swarmcloud-hls@2.8.4/dist/p2p-engine.min.js"></script>
 
-  <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/eruda" crossorigin="anonymous"></script>
-  <script>eruda.init()</script>
+<!--  <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/eruda" crossorigin="anonymous"></script>-->
+<!--  <script>eruda.init()</script>-->
 
 <style>
     .video-js *:focus-visible{
@@ -40,38 +40,38 @@
     },
     html5: {
       //https://github.com/videojs/http-streaming#list
-      vhs: {}
+      vhs: {
+        overrideNative: true,
+        cacheEncryptionKeys: true,
+        useBandwidthFromLocalStorage: true,
+      },
+      nativeAudioTracks: false,
+      nativeVideoTracks: false
     }
   });
-  const logs = (...args) => document.querySelector('#logs').innerHTML += `<div>${args.join(' ')}</div>`;
+
+  const logVar = {}
+  const logs = () => document.querySelector('#logs').innerHTML = Object.values(logVar).join('<br/>');
   //https://swarmcloud.net/cn/views/hls-de/API.html#p2penginehls-api
   const engine = new P2PEngineHls({
-    // logLevel: 'debug',
+    logLevel: 'debug',
     live: false,
-    // sharePlaylist: true,
-    // token: 'Ta-XNIdZg',
+    sharePlaylist: true,
+    token: 'Ta-XNIdZg',
     trackerZone: 'hk',
     swFile: '/worker-swarmcloud.js',
-    webRTCConfig: {
-      iceServers: [
-        { urls: [
-            'stun:stun.hitv.com',
-            'stun:stun.qqlive.qq.com',
-            'stun:stun.qq.com',
-            'stun:stun.vincross.com',
-          ] }
-      ]
-    },
     getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
       const total = totalHTTPDownloaded + totalP2PDownloaded;
-      const stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
-      logs(stats)
+      logVar.stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
+      logs()
     },
     getPeerId (peerId) {
-      logs('peerId: ', peerId)
+      logVar.peerId = 'peerId: ' + peerId
+      logs()
     },
     getPeersInfo (peers) {
-      logs('peersInfo: ' + peers)
+      logVar.peerId = 'peersInfo: ' + peers
+      logs()
     }
   })
   function dataUrlToObjectUrl(dataUrl) {
@@ -87,10 +87,12 @@
   }
   //https://github.com/swarm-cloud/hls-p2p-engine/blob/main/demo/videojs-vhs.html
   engine.registerServiceWorker().finally(async () => {
-    player.src({
-      src: dataUrlToObjectUrl(src),
-      type: 'application/x-mpegURL'
-    })
+    setTimeout(() => {
+      player.src({
+        src: dataUrlToObjectUrl(src),
+        type: 'application/x-mpegURL'
+      })
+    }, 100)
 
     addEventListener('beforeunload', () => {
       navigator.serviceWorker.getRegistrations().then((registrations) => {
