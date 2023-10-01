@@ -165,4 +165,10 @@ onBeforeUnmount(() => {
 .video-js.vjs-user-active.vjs-has-started .vjs-title-bar{
   display: block;
 }
+.video-js *:focus-visible{
+  outline: none;
+}
+.vjs-menu li.vjs-menu-item:focus{
+  background-color: transparent !important;
+}
 </style>
