@@ -1,5 +1,5 @@
 <template>
-  <v-progress-linear color="primary" indeterminate v-if="fetching"/>
+  <v-progress-linear color="primary" indeterminate style="min-height: 4px;" v-if="fetching"/>
   <v-alert v-if="error" closable :text="error.message" type="error" variant="tonal"/>
   <search-input @submit="searchSubmit" />
   <v-virtual-scroll :items="movies" style="max-height: 100%;">
