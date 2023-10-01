@@ -91,6 +91,9 @@ watch(data, () => {
     let {pic, content} = i
     if(content) content = content.replace(/<[^>]*>/g, '').replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
     if(pic) pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
+    // if(pic) pic = 'https://cxqpwhsdja.cloudimg.io/'+ pic.replace(/https?:\/\//, ''); //25g
+    // if(pic) pic = 'https://ik.imagekit.io/4e7delgqdnn/'+ pic; //20g
+    // if(pic) pic = 'https://dg-jx.twic.pics/wsrv/'+ pic.replace(/https?:\/\//, ''); //3g
     return {...i, pic, content}
   })
   if(variables.pg === 1) {
