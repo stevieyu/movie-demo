@@ -37,7 +37,12 @@ const videoPlayerDefaultOptions = {
   html5: {
     //https://github.com/videojs/http-streaming#list
     vhs: {
-    }
+      overrideNative: true,
+      cacheEncryptionKeys: true,
+      useBandwidthFromLocalStorage: true,
+    },
+    nativeAudioTracks: false,
+    nativeVideoTracks: false
   }
 }
 
