@@ -1,0 +1,48 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<div style="position: relative;padding-bottom: 50%;">
+    <div id="dplayer" style="position: absolute;width: 100%;"></div>
+</div>
+<script src="https://s.stevie.top/fastly.jsdelivr.net/npm/cdnbye@latest/dist/hlsjs-p2p-engine.min.js"></script>
+<!--<script src="https://s.stevie.top/fastly.jsdelivr.net/npm/hls.js@0.14.13"></script>-->
+<script src="https://s.stevie.top/fastly.jsdelivr.net/npm/hls.js@1.4.12"></script>
+<script src="https://s.stevie.top/fastly.jsdelivr.net/npm/cbplayer2@latest"></script>
+<script type="module">
+  const src = (new URLSearchParams(location.search)).get('src')
+    || 'https://pptv.1080tg.com/202309/22/riJyehH5nR3/video/index.m3u8'
+
+  const container = document.querySelector('#dplayer');
+  //https://dplayer.diygod.dev/zh/guide.html#%E5%8F%82%E6%95%B0
+  const dp = new CBPlayer({
+    container,
+    autoplay: true,
+    // live: true,
+    playState: true,   // 记忆播放
+    video: {
+      url: src,
+    },
+    pluginOptions: {
+      hls: {
+        debug: false,
+        p2pConfig: {
+          logLevel: false,
+          sharePlaylist: true,
+          token: 'Ta-XNIdZg',
+          trackerZone: 'hk',
+          swFile: '/worker-swarmcloud.js',
+        }
+      }
+    },
+  });
+  // dp.on('loadstart', async (e) => {
+  //   const vStyle = await getComputedStyle(dp.video)
+  //   console.log(' vStyle.height / vStyle.width',  vStyle.height,vStyle.width)
+  //   // container.parentNode.style.paddingBottom =  vStyle.height / vStyle.width;
+  //
+  // });
+  dp.on('loadedmetadata', async (e) => {
+    const vStyle = await getComputedStyle(dp.video)
+    container.parentNode.style.paddingBottom =  eval(`${vStyle.height} / ${vStyle.width} * 100`
+      .replaceAll('px', '')).toFixed(2) + '%';
+
+  });
+</script>

@@ -1,0 +1,50 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="https://s.stevie.top/fastly.jsdelivr.net/npm/vidstack@next/player/styles/default/theme.min.css"/>
+<link rel="stylesheet" href="https://s.stevie.top/fastly.jsdelivr.net/npm/vidstack@next/player/styles/default/layouts/video.min.css"/>
+<script src="https://s.stevie.top/fastly.jsdelivr.net/npm/vidstack@next/cdn/with-layouts/vidstack.js" type="module"></script>
+<div style="position: relative">
+    <media-player style="position: absolute">
+        <media-provider></media-provider>
+        <media-video-layout></media-video-layout>
+    </media-player>
+</div>
+<script type="module">
+  const src = (new URLSearchParams(location.search)).get('src')
+    || 'https://pptv.1080tg.com/202309/22/riJyehH5nR3/video/index.m3u8'
+
+  const instance = document.querySelector("media-player");
+  instance.setAttribute('title', '小小特工')
+  instance.setAttribute('src', src)
+
+  // const {  } = instance.state;
+
+  instance.subscribe(({ height, width, currentTime }) => {
+    instance.parentNode.style.paddingBottom = (height / width * 100).toFixed(2) + '%'
+  });
+
+  const layout = document.querySelector('media-video-layout');
+  layout.translations = {
+    Audio: 'Audio',
+    Auto: '自动',
+    Captions: 'Subtítulos',
+    Chapters: 'Capítulos',
+    Default: '默认',
+    Mute: '静音',
+    Normal: '正常',
+    Off: 'Apagado',
+    Pause: '暂停',
+    Play: '播放',
+    Speed: '倍速',
+    Quality: '质量',
+    Settings: '设置',
+    Unmute: '取消静音',
+    'Seek Forward': 'Avance',
+    'Seek Backward': 'Retroceso',
+    'Closed-Captions On': 'Subtítulos activados',
+    'Closed-Captions Off': 'Subtítulos desactivados',
+    'Enter Fullscreen': '进入全屏',
+    'Exit Fullscreen': '退出全屏',
+    'Enter PiP': '进入画中画',
+    'Exit PiP': '退出画中画',
+  }
+</script>

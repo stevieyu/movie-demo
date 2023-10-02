@@ -6,7 +6,7 @@
 <script setup>
 import {computed, watch} from 'vue'
 import { gql, useQuery } from '@urql/vue';
-import PlayerVideo from './PlayerVideo.vue'
+import PlayerVideo from './PlayerVideoJs.vue'
 import {url} from "@/config/vod";
 
 const props = defineProps({

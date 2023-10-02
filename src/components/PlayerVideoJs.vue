@@ -39,12 +39,6 @@ const videoPlayerDefaultOptions = {
       overrideNative: true,
       cacheEncryptionKeys: true,
       useBandwidthFromLocalStorage: true,
-      handlePartialData: true,
-      useDtsForTimestampOffset: true,
-      calculateTimestampOffsetForEachSegment: true,
-      allowSeeksWithinUnsafeLiveWindow: true,
-      useDevicePixelRatio: true,
-      maxPlaylistRetries: 3,
     },
     nativeAudioTracks: false,
     nativeVideoTracks: false
