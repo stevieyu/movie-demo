@@ -18,10 +18,9 @@ const props = defineProps({
 const videoPlayerEl = ref(null)
 const playlistEl = ref(null)
 
-const {videojs, P2PEngineHls} = window
-
 // https://videojs.com/guides/options/
 const videoPlayerDefaultOptions = {
+  debug: true,
   autoplay: false,
   controls: true,
   preload: 'auto',
@@ -40,6 +39,12 @@ const videoPlayerDefaultOptions = {
       overrideNative: true,
       cacheEncryptionKeys: true,
       useBandwidthFromLocalStorage: true,
+      handlePartialData: true,
+      useDtsForTimestampOffset: true,
+      calculateTimestampOffsetForEachSegment: true,
+      allowSeeksWithinUnsafeLiveWindow: true,
+      useDevicePixelRatio: true,
+      maxPlaylistRetries: 3,
     },
     nativeAudioTracks: false,
     nativeVideoTracks: false
@@ -62,6 +67,7 @@ const peer = reactive({})
 
 let player;
 onMounted(() => {
+  const {videojs, P2PEngineHls} = window
   player = videojs(
     videoPlayerEl.value,
     {
