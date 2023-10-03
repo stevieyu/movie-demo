@@ -1,6 +1,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <div style="position: relative;padding-bottom: 50%;">
-    <div id="dplayer" style="position: absolute;width: 100%;"></div>
+    <div id="dplayer" style="position: absolute;min-width: 100%;"></div>
 </div>
 <script src="https://fastly.jsdelivr.net/npm/cdnbye@latest/dist/hlsjs-p2p-engine.min.js"></script>
 <script src="https://fastly.jsdelivr.net/npm/hls.js@1.4.12"></script>
@@ -17,6 +17,7 @@
     playState: true,
     video: {
       url: src,
+      type: 'hls',
     },
     pluginOptions: {
       //https://github.com/video-dev/hls.js/blob/master/docs/API.md

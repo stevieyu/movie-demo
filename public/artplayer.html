@@ -1,5 +1,6 @@
 <script src="https://fastly.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
-<script src="https://fastly.jsdelivr.net/npm/hls.js@1.4.12"></script>
+<!--<script src="https://fastly.jsdelivr.net/npm/hls.js@1.4.12"></script>-->
+<script src="https://fastly.jsdelivr.net/npm/swarmcloud-hls@latest/dist/hls.min.js"></script>
 <style>
     #artplayer-app{
         position: relative;
@@ -13,11 +14,36 @@
 </style>
 
 <div id="artplayer-app"></div>
+<div id="logs"></div>
 
 <script type="module">
   const src = (new URLSearchParams(location.search)).get('src')
     || 'https://pptv.1080tg.com/202309/22/riJyehH5nR3/video/index.m3u8'
 
+  const logVar = {}
+  const logs = () => document.querySelector('#logs').innerHTML = Object.values(logVar).join('<br/>');
+  //https://swarmcloud.net/cn/views/hls-de/API.html#p2penginehls-api
+  const p2pConfig = {
+    // logLevel: 'debug',
+    // live: false,
+    sharePlaylist: true,
+    token: 'Ta-XNIdZg',
+    trackerZone: 'hk',
+    swFile: '/worker-swarmcloud.js',
+    getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
+      const total = totalHTTPDownloaded + totalP2PDownloaded;
+      logVar.stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
+      logs()
+    },
+    getPeerId (peerId) {
+      logVar.peerId = 'peerId: ' + peerId
+      logs()
+    },
+    getPeersInfo (peers) {
+      logVar.peerId = 'peersInfo: ' + peers
+      logs()
+    }
+  }
 
   //https://www.artplayer.org/document/start/option.html
   const art = new Artplayer({
@@ -26,19 +52,30 @@
     type: 'm3u8',
     customType: {
       m3u8: (video, url, art) => {
-        if (Hls.isSupported()) {
-          if (art.hls) art.hls.destroy();
-          const hls = new Hls({
-            maxMaxBufferLength: 10,
+        // if (Hls.isSupported()) {
+        //   if (art.hls) art.hls.destroy();
+        //   const hls = new Hls({
+        //     maxMaxBufferLength: 10,
+        //   });
+        //   hls.loadSource(url);
+        //   hls.attachMedia(video);
+        //   art.hls = hls;
+        //   art.on('destroy', () => hls.destroy());
+        // } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        //   video.src = url;
+        // } else {
+        //   art.notice.show = '不支持的播放格式：m3u8';
+        // }
+        if (Hls.P2pEngine.isMSESupported()) {
+          var hls = new Hls({
+            p2pConfig
           });
           hls.loadSource(url);
           hls.attachMedia(video);
-          art.hls = hls;
-          art.on('destroy', () => hls.destroy());
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
           video.src = url;
-        } else {
-          art.notice.show = '不支持的播放格式：m3u8';
+          // use ServiceWorker based p2p engine if hls.js is not supported
+          new Hls.P2pEngine(p2pConfig)
         }
       },
     },
