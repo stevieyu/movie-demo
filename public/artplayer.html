@@ -1,0 +1,81 @@
+<script src="https://fastly.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/hls.js@1.4.12"></script>
+<style>
+    #artplayer-app{
+        position: relative;
+
+        .art-video-player{
+            min-width: 100%;
+            min-height: 100%;
+            position: absolute;
+        }
+    }
+</style>
+
+<div id="artplayer-app"></div>
+
+<script type="module">
+  const src = (new URLSearchParams(location.search)).get('src')
+    || 'https://pptv.1080tg.com/202309/22/riJyehH5nR3/video/index.m3u8'
+
+
+  //https://www.artplayer.org/document/start/option.html
+  const art = new Artplayer({
+    container: '#artplayer-app',
+    url: src,
+    type: 'm3u8',
+    customType: {
+      m3u8: (video, url, art) => {
+        if (Hls.isSupported()) {
+          if (art.hls) art.hls.destroy();
+          const hls = new Hls({
+            maxMaxBufferLength: 10,
+          });
+          hls.loadSource(url);
+          hls.attachMedia(video);
+          art.hls = hls;
+          art.on('destroy', () => hls.destroy());
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = url;
+        } else {
+          art.notice.show = '不支持的播放格式：m3u8';
+        }
+      },
+    },
+    pip: true,
+    autoSize: true,
+    autoMini: true,
+    setting: true,
+    settings: [
+      {
+        width: 200,
+        html: '选集',
+        tooltip: '非常小特务：大决战',
+        selector: [
+          {
+            // default: true,
+            html: '四大名妓之苏小小',
+            url: 'https://youku.1080tg.com/20220913/pbcaYIdv/index.m3u8',
+          },{
+            html: '某大叔的VRMMO活动记',
+            url: 'https://pptv.1080tg.com/202310/03/Sigkrw1NYV3/video/index.m3u8',
+          },
+        ],
+        onSelect: (item) => {
+          art.switch = item.url;
+          return item.html;
+        },
+      },
+    ],
+    playbackRate: true,
+    fullscreen: true,
+    miniProgressBar: true,
+    mutex: true,
+    playsInline: true,
+    autoPlayback: true,
+    airplay: true,
+  });
+  art.on('resize', () => {
+    art.autoHeight();
+  });
+</script>
