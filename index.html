@@ -23,7 +23,13 @@
 <!--  <script>eruda.init()</script>-->
 
   <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/vconsole@latest/dist/vconsole.min.js"></script>
-  <script>new window.VConsole()</script>
+  <script>
+    if(location.search.includes('debug') || sessionStorage.getItem('debug')){
+      new window.VConsole()
+      sessionStorage.setItem('debug', 1)
+    }
+
+  </script>
 
 </head>
 
