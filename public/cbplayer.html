@@ -3,7 +3,6 @@
     <div id="dplayer" style="position: absolute;width: 100%;"></div>
 </div>
 <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/cdnbye@latest/dist/hlsjs-p2p-engine.min.js"></script>
-<!--<script src="https://s.stevie.top/fastly.jsdelivr.net/npm/hls.js@0.14.13"></script>-->
 <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/hls.js@1.4.12"></script>
 <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/cbplayer2@latest"></script>
 <script type="module">
@@ -15,14 +14,30 @@
   const dp = new CBPlayer({
     container,
     autoplay: true,
-    // live: true,
-    playState: true,   // 记忆播放
+    playState: true,
     video: {
       url: src,
     },
     pluginOptions: {
+      //https://github.com/video-dev/hls.js/blob/master/docs/API.md
       hls: {
         debug: false,
+        playlistLoadPolicy: {
+          default: {
+            maxTimeToFirstByteMs: 10000,
+            maxLoadTimeMs: 20000,
+            timeoutRetry: {
+              maxNumRetry: 2,
+              retryDelayMs: 0,
+              maxRetryDelayMs: 0,
+            },
+            errorRetry: {
+              maxNumRetry: 2,
+              retryDelayMs: 1000,
+              maxRetryDelayMs: 8000,
+            },
+          },
+        },
         p2pConfig: {
           logLevel: false,
           sharePlaylist: true,
@@ -33,16 +48,15 @@
       }
     },
   });
-  // dp.on('loadstart', async (e) => {
-  //   const vStyle = await getComputedStyle(dp.video)
-  //   console.log(' vStyle.height / vStyle.width',  vStyle.height,vStyle.width)
-  //   // container.parentNode.style.paddingBottom =  vStyle.height / vStyle.width;
-  //
-  // });
   dp.on('loadedmetadata', async (e) => {
     const vStyle = await getComputedStyle(dp.video)
-    container.parentNode.style.paddingBottom =  eval(`${vStyle.height} / ${vStyle.width} * 100`
+    const percent = eval(`${vStyle.height} / ${vStyle.width} * 100`
       .replaceAll('px', '')).toFixed(2) + '%';
-
+    container.parentNode.style.paddingBottom = percent;
+    parent.postMessage({
+      channel: 'cbplayer',
+      type: 'height-percent',
+      val: percent
+    }, '*')
   });
 </script>
