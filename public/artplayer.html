@@ -114,6 +114,9 @@
     autoPlayback: true,
     airplay: true,
   });
+  art.on('ready', () => {
+    art.autoHeight();
+  });
   art.on('resize', () => {
     art.autoHeight();
   });
