@@ -69,6 +69,7 @@ const playUrl = computed(() => (video.value?.playUrl?.match(/([^$#]+)\$(http[^$#
   .map((i) => {
     let [name, src] = i.split('$')
     src = 'https://faas-sgp1-18bc02ac.doserverless.co/api/v1/web/fn-41e9df6e-4d4b-4032-8fb2-e91907859969/default/cors-php' + src.replace(/https?:\//, '');
+    // src = 'https://closely-dynamic-quetzal.edgecompute.app/hono.dgjx.workers.dev' + src.replace(/https?:\//, '');
     return {
       name,
       sources: [{
