@@ -23,4 +23,6 @@ const app = createApp(App)
 
 registerPlugins(app)
 
+import 'virtual:uno.css'
+
 app.mount('#app')

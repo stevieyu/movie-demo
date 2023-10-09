@@ -2,9 +2,9 @@
   <v-progress-linear color="primary" indeterminate style="min-height: 4px;" v-if="fetching"/>
   <v-alert v-if="error" closable :text="error.message" type="error" variant="tonal"/>
   <search-input @submit="searchSubmit" />
-  <v-virtual-scroll :items="movies" style="max-height: 100%;">
-    <template v-slot:default="{ item, index }">
-      <v-card class="ma-4" v-ripple @click="$router.push(`/videos/${item.id}`)">
+  <div class="overflow-auto h-100 d-flex flex-wrap pa-2">
+    <div v-for="item in movies" :key="item.id" class="pa-2 w-full sm:w-1/2 lg:w-1/3 2xl:w-1/4">
+      <v-card v-ripple @click="$router.push(`/videos/${item.id}`)">
         <v-img
           :src="item.pic"
           class="align-end"
@@ -13,31 +13,30 @@
         >
           <v-card-title>{{ item.name }}</v-card-title>
           <div class="d-flex justify-space-between">
-              <v-card-subtitle class="d-flex flex-column justify-space-between">
-                  <div>{{ item.sub }}</div>
-                  <div>{{ item.category.name }}</div>
-                  <div>{{ item.remarks }}</div>
-                  <div>{{item.playFrom}}</div>
-              </v-card-subtitle>
-              <v-card-actions>
-                  <v-btn
-                          class="ms-2"
-                          icon="mdi-play"
-                          variant="text"
-                  />
-              </v-card-actions>
+            <v-card-subtitle class="d-flex flex-column justify-space-between">
+              <div>{{ item.sub }}</div>
+              <div>{{ item.category.name }}</div>
+              <div>{{ item.remarks }}</div>
+              <div>{{item.playFrom}}</div>
+            </v-card-subtitle>
+            <v-card-actions>
+              <v-btn
+                class="ms-2"
+                icon="mdi-play"
+                variant="text"
+              />
+            </v-card-actions>
           </div>
           <v-card-text>{{ item.content }}</v-card-text>
-
         </v-img>
       </v-card>
-      <div class="text-center py-2" v-intersect="loadMore()" v-if="index - 19 >= 0 && movies?.length <= (index + 1)">
-        <v-btn @click="loadMore()" :loading="fetching">
-          点击加载更多
-        </v-btn>
-      </div>
-    </template>
-  </v-virtual-scroll>
+    </div>
+    <div class="text-center py-2 w-full" v-if="movies?.length > 19">
+      <v-btn @click="loadMore()" v-intersect="() => loadMore()" :loading="fetching">
+        点击加载更多
+      </v-btn>
+    </div>
+  </div>
 </template>
 <script setup>
 import {computed, reactive, ref, watch} from 'vue'
@@ -120,3 +119,4 @@ const loadMore = useDebounceFn((_pg = null) => {
   variables.pg = _pg ?? variables.pg+1;
 }, 100)
 </script>
+

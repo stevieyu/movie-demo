@@ -2,6 +2,7 @@
 import vue from '@vitejs/plugin-vue'
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import ViteFonts from 'unplugin-fonts/vite'
+import UnoCSS from 'unocss/vite'
 
 // Utilities
 import { defineConfig } from 'vite'
@@ -13,6 +14,8 @@ export default defineConfig({
     vue({
       template: { transformAssetUrls }
     }),
+    //https://unocss.dev/integrations/vite
+    UnoCSS(),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({
       autoImport: true,
