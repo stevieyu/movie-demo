@@ -90,31 +90,35 @@ onMounted(() => {
       peer.info = info
     }
   })
-  engine.registerServiceWorker().finally(() => {
-    player.playlist([
-      // {
-      //     name: '第一集',
-      //     sources: [{
-      //         src: 'https://s5.bfzycdn.com/video/lanman/第77集/index.m3u8',
-      //         type: 'application/x-mpegURL'
-      //     }],
-      // }
-      ...props.playlist
-    ].filter(i => Array.isArray(i.sources) && i.sources.filter(i => i.src).length));
-    player.playlistUi({
-      el: playlistEl.value
-    });
-    // https://github.com/prateekrastogi/videojs-landscape-fullscreen
-    // 在移动端根据视频比例选择全屏机制: https://blog.csdn.net/qq_43614372/article/details/129367231
-    player.landscapeFullscreen({
-      fullscreen: {
-        enterOnRotate: true, // 横向旋转设备时进入全屏模式
-        exitOnRotate: true, // 纵向旋转设备时退出全屏模式
-        alwaysInLandscapeMode: true, // 始终以横向模式进入全屏模式，即使设备处于纵向模式
-        iOS: true //是否在iOS上使用假全屏（显示播放器控件而不是系统控件需要）
-      }
-    });
-  })
+  engine.registerServiceWorker()
+    .catch(e => {
+      console.log('P2PEngineHls error:', e)
+    })
+    .finally(() => {
+      player.playlist([
+        // {
+        //     name: '第一集',
+        //     sources: [{
+        //         src: 'https://s5.bfzycdn.com/video/lanman/第77集/index.m3u8',
+        //         type: 'application/x-mpegURL'
+        //     }],
+        // }
+        ...props.playlist
+      ].filter(i => Array.isArray(i.sources) && i.sources.filter(i => i.src).length));
+      player.playlistUi({
+        el: playlistEl.value
+      });
+      // https://github.com/prateekrastogi/videojs-landscape-fullscreen
+      // 在移动端根据视频比例选择全屏机制: https://blog.csdn.net/qq_43614372/article/details/129367231
+      player.landscapeFullscreen({
+        fullscreen: {
+          enterOnRotate: true, // 横向旋转设备时进入全屏模式
+          exitOnRotate: true, // 纵向旋转设备时退出全屏模式
+          alwaysInLandscapeMode: true, // 始终以横向模式进入全屏模式，即使设备处于纵向模式
+          iOS: true //是否在iOS上使用假全屏（显示播放器控件而不是系统控件需要）
+        }
+      });
+    })
 
 })
 onBeforeUnmount(() => {
