@@ -89,13 +89,13 @@ watch(data, () => {
   const _movies = (data.value?.movies || []).map((i) => {
     let {pic, content} = i
     if(content) content = content.replace(/<[^>]*>/g, '').replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
-    if(pic && /ffzy/.test(pic)){
-      pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
+    if(pic && /ffzy|haiwaikan/.test(pic)){
+      // pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
+      // pic = 'https://cxqpwhsdja.cloudimg.io/'+ pic.replace(/https?:\/\//, ''); //25g
+      // pic = 'https://ik.imagekit.io/4e7delgqdnn/'+ pic; //20g
+      // pic = 'https://dg-jx.twic.pics/wsrv/'+ pic.replace(/https?:\/\//, ''); //3g
+      pic = 'https://s.stevie.top/'+ pic.replace(/https?:\/\//, '');
     }
-    // if(pic) pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
-    // if(pic) pic = 'https://cxqpwhsdja.cloudimg.io/'+ pic.replace(/https?:\/\//, ''); //25g
-    // if(pic) pic = 'https://ik.imagekit.io/4e7delgqdnn/'+ pic; //20g
-    // if(pic) pic = 'https://dg-jx.twic.pics/wsrv/'+ pic.replace(/https?:\/\//, ''); //3g
     return {...i, pic, content}
   })
   if(variables.pg === 1) {
