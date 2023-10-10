@@ -12,7 +12,13 @@ import { fileURLToPath, URL } from 'node:url'
 export default defineConfig({
   plugins: [
     vue({
-      template: { transformAssetUrls }
+      template: {
+        transformAssetUrls,
+        compilerOptions: {
+          // treat all tags with a dash as custom elements
+          isCustomElement: (tag) => tag.includes('dotlottie-'),
+        },
+      }
     }),
     //https://unocss.dev/integrations/vite
     UnoCSS(),
