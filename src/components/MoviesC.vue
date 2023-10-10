@@ -2,7 +2,7 @@
   <v-progress-linear color="primary" indeterminate style="min-height: 4px;" v-if="fetching"/>
   <v-alert v-if="error" closable :text="error.message" type="error" variant="tonal"/>
   <search-input @submit="searchSubmit" />
-  <div class="overflow-auto h-100 d-flex flex-wrap pa-2">
+  <div class="overflow-auto max-h-full d-flex flex-wrap pa-2">
     <div v-for="item in movies" :key="item.id" class="pa-2 w-full sm:w-1/2 lg:w-1/3 2xl:w-1/4">
       <v-card v-ripple @click="$router.push(`/videos/${item.id}`)">
         <v-img
@@ -58,7 +58,7 @@ const variables = reactive({
 
 const {fetching, data, error} = useQuery({
   query: gql`
-query($pg: Int!, $c: Int, $wd: String, $url: URL!){
+query($pg: Int, $c: Int, $wd: String, $url: URL){
   movies(pg: $pg, _url: $url, c: $c, wd: $wd){
     id
     name
@@ -89,6 +89,9 @@ watch(data, () => {
   const _movies = (data.value?.movies || []).map((i) => {
     let {pic, content} = i
     if(content) content = content.replace(/<[^>]*>/g, '').replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
+    if(pic && /ff/.test(pic)){
+      pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
+    }
     // if(pic) pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
     // if(pic) pic = 'https://cxqpwhsdja.cloudimg.io/'+ pic.replace(/https?:\/\//, ''); //25g
     // if(pic) pic = 'https://ik.imagekit.io/4e7delgqdnn/'+ pic; //20g

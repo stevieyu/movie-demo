@@ -1,5 +1,6 @@
 <template>
   <v-progress-linear color="primary" indeterminate v-if="fetching"/>
+  <v-alert v-if="error" closable :text="error.message" type="error" variant="tonal"/>
   <PlayerVideo :playlist="playUrl" v-if="playUrl.length"/>
 </template>
 
@@ -16,9 +17,9 @@ const props = defineProps({
   }
 })
 
-const {data, fetching} = useQuery({
+const {data, fetching, error} = useQuery({
   query: gql`
-query($ids: [String!], $url: URL!){
+query($ids: [String!], $url: URL){
   movies(ids: $ids, _url: $url){
     id
     name
