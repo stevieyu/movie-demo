@@ -58,10 +58,28 @@ const videoPlayerDefaultOptions = {
 // }
 
 const peer = reactive({})
+const {videojs, P2PEngineHls} = window
+const engine = new P2PEngineHls({
+  // logLevel: true,
+  live: false,
+  // token: 'Ta-XNIdZg',
+  // sharePlaylist: true,
+  trackerZone: 'hk',
+  swFile: '/worker-swarmcloud.js',
+  getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
+    const total = totalHTTPDownloaded + totalP2PDownloaded;
+    peer.stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
+  },
+  getPeerId (id) {
+    peer.id = id
+  },
+  getPeersInfo (info) {
+    peer.info = info
+  }
+})
 
 let player;
 onMounted(() => {
-  const {videojs, P2PEngineHls} = window
   player = videojs(
     videoPlayerEl.value,
     {
@@ -72,24 +90,6 @@ onMounted(() => {
     }
   );
 
-  const engine = new P2PEngineHls({
-    // logLevel: true,
-    live: false,
-    // token: 'Ta-XNIdZg',
-    // sharePlaylist: true,
-    trackerZone: 'hk',
-    swFile: '/worker-swarmcloud.js',
-    getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
-      const total = totalHTTPDownloaded + totalP2PDownloaded;
-      peer.stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
-    },
-    getPeerId (id) {
-      peer.id = id
-    },
-    getPeersInfo (info) {
-      peer.info = info
-    }
-  })
   engine.registerServiceWorker()
     .catch(e => {
       console.log('P2PEngineHls error:', e)
