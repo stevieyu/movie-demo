@@ -2,7 +2,7 @@
   <v-app class="h-screen" theme="dark">
 <!--    <default-bar />-->
 
-    <v-main class="d-flex flex-column h-100">
+    <v-main class="flex flex-column max-h-full overflow-hidden">
       <router-view />
     </v-main>
   </v-app>

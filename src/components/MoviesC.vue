@@ -89,7 +89,7 @@ watch(data, () => {
   const _movies = (data.value?.movies || []).map((i) => {
     let {pic, content} = i
     if(content) content = content.replace(/<[^>]*>/g, '').replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
-    if(pic && /ff/.test(pic)){
+    if(pic && /ffzy/.test(pic)){
       pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
     }
     // if(pic) pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
@@ -110,7 +110,7 @@ watch(data, () => {
 })
 
 const searchSubmit = (from) => {
-  from = Object.fromEntries(Object.entries(from).filter(([,v])=> v))
+  from = Object.fromEntries(Object.entries(from))
   Object.assign(variables, from, {pg: 1})
   $router.replace({
     query: from
