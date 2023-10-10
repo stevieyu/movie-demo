@@ -20,7 +20,7 @@ const playlistEl = ref(null)
 
 // https://videojs.com/guides/options/
 const videoPlayerDefaultOptions = {
-  debug: true,
+  debug: false,
   autoplay: false,
   controls: true,
   preload: 'auto',
