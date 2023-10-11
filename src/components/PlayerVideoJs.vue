@@ -165,6 +165,10 @@ onBeforeUnmount(() => {
     }
 
   }
+
+  .vjs-playlist-ad-overlay{
+    display: none;
+  }
 }
 
 .video-js{
