@@ -3,9 +3,9 @@
     <div class="w-full md:w-2/3">
       <video-js ref="videoPlayerEl" class="video-js vjs-big-play-centered vjs-fluid" />
     </div>
-    <div class="flex-auto">
+    <div class="md:w-1/3 flex flex-column max-h-full">
       <pre>{{peer}}</pre>
-      <div class="vjs-playlist" ref="playlistEl" style="overflow: auto;flex: auto;"></div>
+      <div class="vjs-playlist overflow-auto flex-auto max-h-full" ref="playlistEl"></div>
     </div>
   </div>
 </template>
@@ -50,7 +50,10 @@ const videoPlayerDefaultOptions = {
 }
 
 const peer = reactive({})
+
 const {videojs, P2PEngineHls} = window
+
+//https://swarmcloud.net/cn/views/hls-de/API.html#p2penginehls-api
 const engine = new P2PEngineHls({
   // logLevel: true,
   live: false,
@@ -76,6 +79,7 @@ const engine = new P2PEngineHls({
 
 let player;
 onMounted(() => {
+  // https://www.cdnbye.com/oms/#/user/liveDataGlobal
   player = videojs(
     videoPlayerEl.value,
     {
@@ -122,58 +126,53 @@ onBeforeUnmount(() => {
 })
 </script>
 <style>
-.vjs-playlist-item {
-  margin: 1.5em 1em;
-  display: block;
-}
-.vjs-playlist-thumbnail{
+.vjs-playlist-item-list{
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
+
+  .vjs-playlist-item {
+    margin: .4em;
+    display: block;
+    border: 1px solid #aaa;
+    border-radius: .4em;
+    padding: .4em .8em;
+
+    .vjs-playlist-thumbnail{
+      display: flex;
+      justify-content: space-between;
+
+      .vjs-playlist-now-playing-text {
+        display: none;
+      }
+
+      .vjs-up-next-text{
+        display: none;
+      }
+
+      .vjs-playlist-name{
+        font-style: normal;
+      }
+
+    }
+
+    &.vjs-selected {
+      opacity: .4;
+    }
+    &.vjs-up-next{
+      border-color: #999;
+      opacity: .8;
+    }
+
+  }
 }
 
-.vjs-playlist-title-container {
-  display: flex;
-  justify-content: space-between;
-  flex: auto;
-}
-.vjs-up-next-text{
-  flex-grow: 1;
-  opacity: 0;
-}
-.vjs-playlist-now-playing-text {
-  display: none;
-}
-
-.vjs-selected {
-  opacity: .8;
-  display: inherit;
-}
-.vjs-up-next .vjs-up-next-text{
-  opacity: 1;
-}
-.vjs-selected .vjs-playlist-now-playing-text {
-  display: block;
-}
-.video-js .vjs-title-bar {
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  display: none;
-  font-size: 2em;
-  padding: .5em;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
-
-.video-js.vjs-paused.vjs-has-started .vjs-title-bar,
-.video-js.vjs-user-active.vjs-has-started .vjs-title-bar{
-  display: block;
-}
-.video-js *:focus-visible{
-  outline: none;
-}
-.vjs-menu li.vjs-menu-item:focus{
-  background-color: transparent !important;
+.video-js{
+  .vjs-menu li.vjs-menu-item:focus{
+    background-color: transparent !important;
+  }
+  *:focus-visible{
+    outline: none;
+  }
 }
 </style>
