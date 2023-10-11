@@ -50,9 +50,7 @@ query($ids: [String!], $url: URL){
     year
     version
   }
-}
-`
-  ,
+}`,
   variables: {
     ids: [props.id],
     url

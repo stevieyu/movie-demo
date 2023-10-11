@@ -72,8 +72,7 @@ query($pg: Int, $c: Int, $wd: String, $url: URL){
       name
     }
   }
-}
-      `,
+}`,
   variables: computed(() =>
     Object.fromEntries(
       Object.entries(variables).map(([k, v]) =>

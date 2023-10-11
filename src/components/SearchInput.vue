@@ -55,8 +55,7 @@ const {data} = useQuery({
         name
         pid
       }
-    }
-    `,
+    }`,
   variables: {url}
 })
 
