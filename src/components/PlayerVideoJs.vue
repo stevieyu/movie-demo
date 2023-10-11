@@ -3,7 +3,7 @@
     <div class="w-full md:w-2/3">
       <video-js ref="videoPlayerEl" class="video-js vjs-big-play-centered vjs-fluid" />
     </div>
-    <div class="md:w-1/3 flex flex-column max-h-full">
+    <div class="w-full md:w-1/3 flex flex-column max-h-full">
       <pre>{{peer}}</pre>
       <div class="vjs-playlist overflow-auto flex-auto max-h-full" ref="playlistEl"></div>
     </div>
