@@ -1,8 +1,12 @@
 <template>
-  <div style="display: flex;flex-direction: column;max-height: 100%;">
-    <video ref="videoPlayerEl" class="video-js vjs-big-play-centered vjs-fluid" />
-    <pre style="white-space: break-spaces;">{{peer}}</pre>
-    <div class="vjs-playlist" ref="playlistEl" style="overflow: auto;flex: auto;"></div>
+  <div class="flex flex-wrap max-h-full">
+    <div class="w-full md:w-2/3">
+      <video-js ref="videoPlayerEl" class="video-js vjs-big-play-centered vjs-fluid" />
+    </div>
+    <div class="flex-auto">
+      <pre>{{peer}}</pre>
+      <div class="vjs-playlist" ref="playlistEl" style="overflow: auto;flex: auto;"></div>
+    </div>
   </div>
 </template>
 <script setup>
@@ -45,18 +49,6 @@ const videoPlayerDefaultOptions = {
   }
 }
 
-// function dataUrlToObjectUrl(dataUrl) {
-//   if(!/^data:/.test(dataUrl)) return dataUrl
-//   const byteString = atob(dataUrl.replace(/^.*?,/, ''));
-//   const uint8Array = (new Uint8Array(new ArrayBuffer(byteString.length)))
-//     .map((i, idx) => byteString.charCodeAt(idx));
-//
-//   return URL.createObjectURL(
-//     new Blob([uint8Array],
-//       { type: dataUrl.replace(/^data:(.*?)[;,].*$/, '$1') })
-//   );
-// }
-
 const peer = reactive({})
 const {videojs, P2PEngineHls} = window
 const engine = new P2PEngineHls({
@@ -68,7 +60,11 @@ const engine = new P2PEngineHls({
   swFile: '/worker-swarmcloud.js',
   getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
     const total = totalHTTPDownloaded + totalP2PDownloaded;
-    peer.stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
+    peer.stats = {
+      download_ratio: Math.round(totalP2PDownloaded/total*100) + '%',
+      downloaded: totalP2PDownloaded + 'KB',
+      uploaded: totalP2PUploaded + 'KB'
+    }
   },
   getPeerId (id) {
     peer.id = id
