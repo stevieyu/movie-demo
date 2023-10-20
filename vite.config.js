@@ -16,7 +16,10 @@ export default defineConfig({
         transformAssetUrls,
         compilerOptions: {
           // treat all tags with a dash as custom elements
-          isCustomElement: (tag) => tag.includes('dotlottie-'),
+          isCustomElement: (tag) =>
+            tag.includes('dotlottie-')
+            || tag.includes('sl-')
+          ,
         },
       }
     }),
