@@ -1,7 +1,15 @@
 // Plugins
 import vue from '@vitejs/plugin-vue'
+
+import Components from 'unplugin-vue-components/vite'
+import {
+  PrimeVueResolver,
+} from 'unplugin-vue-components/resolvers'
+
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+
 import ViteFonts from 'unplugin-fonts/vite'
+
 import UnoCSS from 'unocss/vite'
 import presetUno from '@unocss/preset-uno'
 import presetAttributify from '@unocss/preset-attributify'
@@ -26,6 +34,12 @@ export default defineConfig({
         },
       }
     }),
+    // https://github.com/unplugin/unplugin-vue-components#configuration
+    Components({
+      resolvers: [
+        PrimeVueResolver(),
+      ],
+    }),
     //https://unocss.dev/integrations/vite
     UnoCSS({
       presets: [
@@ -36,7 +50,8 @@ export default defineConfig({
         pipeline: {
           include: [
             "./src/**/*.{vue,js,ts,jsx,tsx}",
-            "./node_modules/vuetify/**/*.{vue,js,ts,jsx,tsx}"
+            "./node_modules/vuetify/**/*.{vue,js,ts,jsx,tsx}",
+            "./node_modules/primevue/**/*.{vue,js,ts,jsx,tsx}"
           ]
         }
       }

@@ -10,7 +10,6 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@mdi/font": "^7.3.67",
     "@tanstack/vue-virtual": "3.0.0-beta.66",
     "@urql/exchange-graphcache": "^6.3.3",
     "@urql/vue": "^1.1.2",
@@ -18,9 +17,11 @@
     "pinia": "^2.1.7",
     "vue": "^3.3.6",
     "vue-router": "^4.2.5",
-    "vuetify": "^3.3.22"
+    "vuetify": "^3.3.22",
+    "primevue": "^3.37.0"
   },
   "devDependencies": {
+    "unplugin-vue-components": "latest",
     "@vitejs/plugin-vue": "^4.4.0",
     "eslint": "^8.52.0",
     "eslint-plugin-vue": "^9.18.0",

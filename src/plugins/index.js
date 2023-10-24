@@ -6,6 +6,7 @@
 
 // Plugins
 import vuetify from './vuetify'
+import primevue from './primevue'
 import urql from './urql'
 import pinia from '../store'
 import router from '../router'
@@ -13,7 +14,7 @@ import router from '../router'
 export function registerPlugins (app) {
   app
     .use(vuetify)
-    // .use(vuesax)
+    .use(primevue)
     .use(urql)
     .use(router)
     .use(pinia)

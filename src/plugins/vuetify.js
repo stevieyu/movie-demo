@@ -5,11 +5,10 @@
  */
 
 // Styles
-import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 
 // Composables
-import { createVuetify } from 'vuetify'
+import {createVuetify} from 'vuetify'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -23,4 +22,13 @@ export default createVuetify({
       },
     },
   },
-})
+});
+
+[
+  'https://fastly.jsdelivr.net/npm/@mdi/font@7/css/materialdesignicons.min.css'
+].forEach(i => {
+  const s = document.createElement('link')
+  s.href = i
+  s.rel = 'stylesheet'
+  document.head.appendChild(s)
+});
