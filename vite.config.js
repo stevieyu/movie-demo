@@ -3,6 +3,9 @@ import vue from '@vitejs/plugin-vue'
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import ViteFonts from 'unplugin-fonts/vite'
 import UnoCSS from 'unocss/vite'
+import presetUno from '@unocss/preset-uno'
+import presetAttributify from '@unocss/preset-attributify'
+
 
 // Utilities
 import { defineConfig } from 'vite'
@@ -24,7 +27,20 @@ export default defineConfig({
       }
     }),
     //https://unocss.dev/integrations/vite
-    UnoCSS(),
+    UnoCSS({
+      presets: [
+        presetUno(),
+        presetAttributify()
+      ],
+      content: {
+        pipeline: {
+          include: [
+            "./src/**/*.{vue,js,ts,jsx,tsx}",
+            "./node_modules/vuetify/**/*.{vue,js,ts,jsx,tsx}"
+          ]
+        }
+      }
+    }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({
       autoImport: true,

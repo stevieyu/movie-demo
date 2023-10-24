@@ -16,17 +16,16 @@
     "@urql/vue": "^1.1.2",
     "@vueuse/core": "^10.5.0",
     "pinia": "^2.1.7",
-    "vue": "^3.3.5",
+    "vue": "^3.3.6",
     "vue-router": "^4.2.5",
-    "vuesax-alpha": "0.2.0-beta.61",
     "vuetify": "^3.3.22"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
-    "eslint": "^8.51.0",
-    "eslint-plugin-vue": "^9.17.0",
+    "eslint": "^8.52.0",
+    "eslint-plugin-vue": "^9.18.0",
     "sass": "^1.69.4",
-    "unocss": "^0.56.5",
+    "unocss": "^0.57.1",
     "unplugin-fonts": "^1.0.3",
     "vite": "^4.5.0",
     "vite-plugin-vuetify": "^1.0.2"
