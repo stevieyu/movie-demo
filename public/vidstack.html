@@ -37,6 +37,11 @@
     sessionStorage.setItem(ctKey, instance.currentTime.toFixed(0))
   });
 
+  instance.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    console.log('右键菜单')
+  });
+
   const logs = () => $('#logs').innerHTML = Object.values(logs.data).join('<br/>');
   logs.data = {}
   instance.addEventListener('provider-change', (event) => {
