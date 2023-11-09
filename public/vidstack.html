@@ -1,6 +1,5 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="stylesheet" href="https://jsd.onmicrosoft.cn/combine/npm/modern-normalize/modern-normalize.min.css,npm/vidstack@next/player/styles/default/theme.min.css,npm/vidstack@next/player/styles/default/layouts/video.min.css"/>
-<script src="https://jsd.onmicrosoft.cn/npm/cash-dom/dist/cash.min.js"></script>
 <script type="module" src="https://esm.sctes.stevie.top/cdn.jsdelivr.net/npm/vidstack@next/cdn/with-layouts/vidstack.js"></script>
 <style>body{background: #000;color: #ccc}</style>
 <media-player>
@@ -14,8 +13,9 @@
     title = '小小特工'
   } = Object.fromEntries(new URLSearchParams(location.search))
 
+  const $ = (...args) => document.querySelector(...args)
 
-  const instance = document.querySelector("media-player");
+  const instance = $("media-player");
   instance.setAttribute('title', title)
   instance.setAttribute('src', src)
 
@@ -23,7 +23,9 @@
   //   instance.parentNode.style.paddingBottom = (height / width * 100).toFixed(2) + '%'
   // });
 
-  const logs = () => document.querySelector('#logs').innerHTML = Object.values(logs.data).join('<br/>');
+  // console.log(instance)
+
+  const logs = () => $('#logs').innerHTML = Object.values(logs.data).join('<br/>');
   logs.data = {}
   instance.addEventListener('provider-change', (event) => {
     const provider = event.detail;
@@ -56,7 +58,7 @@
     }
   });
 
-  const layout = document.querySelector('media-video-layout');
+  const layout = $('media-video-layout');
   layout.translations = {
     Audio: 'Audio',
     Auto: '自动',
