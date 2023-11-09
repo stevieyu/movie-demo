@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="https://jsd.onmicrosoft.cn/combine/npm/modern-normalize/modern-normalize.min.css,npm/vidstack@next/player/styles/default/theme.min.css,npm/vidstack@next/player/styles/default/layouts/video.min.css"/>
 <script type="module" src="https://esm.sctes.stevie.top/cdn.jsdelivr.net/npm/vidstack@next/cdn/with-layouts/vidstack.js"></script>
 <style>body{background: #000;color: #ccc}</style>
-<media-player playsinline>
+<media-player playsinline autoplay>
     <media-provider></media-provider>
     <media-video-layout></media-video-layout>
 </media-player>
@@ -16,8 +16,8 @@
   const $ = (...args) => document.querySelector(...args)
 
   const instance = $("media-player");
-  instance.setAttribute('title', title)
-  instance.setAttribute('src', src)
+  instance.title = title
+  instance.src = src
 
   // instance.subscribe(({ height, width, currentTime }) => {
   //   instance.parentNode.style.paddingBottom = (height / width * 100).toFixed(2) + '%'
@@ -25,16 +25,31 @@
 
   // console.log(instance)
 
+  const ctKey = 'ct:' + src
+  const ct = +sessionStorage.getItem(ctKey)
+  if(ct) {
+    instance.currentTime = ct
+  }
+  instance.addEventListener('pause', () => {
+    sessionStorage.setItem(ctKey, instance.currentTime.toFixed(0))
+  })
+  addEventListener('beforeunload', () => {
+    sessionStorage.setItem(ctKey, instance.currentTime.toFixed(0))
+  });
+
   const logs = () => $('#logs').innerHTML = Object.values(logs.data).join('<br/>');
   logs.data = {}
   instance.addEventListener('provider-change', (event) => {
     const provider = event.detail;
     if (provider?.type === 'hls') {
       provider.library = 'https://jsd.onmicrosoft.cn/npm/swarmcloud-hls@latest/dist/hls.min.js';
+      // provider.library = 'https://jsd.onmicrosoft.cn/npm/hls.js/dist/hls.min.js';
+
+      //https://github.com/video-dev/hls.js/blob/master/docs/API.md
       provider.config = {
-        // maxBufferSize: 0,
-        // maxMaxBufferLength: 10,
-        // liveSyncDurationCount: 10,
+        maxBufferSize: 0,
+        maxMaxBufferLength: 10,
+        liveSyncDurationCount: 10,
         //https://swarmcloud.net/cn/views/hls-de/API.html#p2penginehls-api
         p2pConfig: {
           sharePlaylist: true,
