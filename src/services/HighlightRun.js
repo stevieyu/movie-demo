@@ -1,5 +1,5 @@
 // import {H} from 'https://s.stevie.top/esm.sh/highlight.run@7.5.3?bundle';
-import 'https://s.stevie.top/fastly.jsdelivr.net/npm/highlight.run@7/dist/index.umd.min.js'
+import 'https://jsd.onmicrosoft.cn/npm/highlight.run@7/dist/index.umd.min.js'
 const {H} = window
 
 /*

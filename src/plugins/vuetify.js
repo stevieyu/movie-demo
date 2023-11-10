@@ -25,7 +25,7 @@ export default createVuetify({
 });
 
 [
-  'https://fastly.jsdelivr.net/npm/@mdi/font@7/css/materialdesignicons.min.css'
+  'https://jsd.onmicrosoft.cn/npm/@mdi/font@7/css/materialdesignicons.min.css'
 ].forEach(i => {
   const s = document.createElement('link')
   s.href = i

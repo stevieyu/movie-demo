@@ -17,9 +17,9 @@ export default {
 };
 
 [
-  'https://fastly.jsdelivr.net/npm/primeicons@6/primeicons.min.css',
-  // 'https://fastly.jsdelivr.net/npm/primevue/resources/themes/lara-light-blue/theme.min.css',
-  'https://fastly.jsdelivr.net/npm/primevue/resources/themes/lara-dark-blue/theme.min.css'
+  'https://jsd.onmicrosoft.cn/npm/primeicons@6/primeicons.min.css',
+  // 'https://jsd.onmicrosoft.cn/npm/primevue/resources/themes/lara-light-blue/theme.min.css',
+  'https://jsd.onmicrosoft.cn/npm/primevue/resources/themes/lara-dark-blue/theme.min.css'
 ].forEach(i => {
   const s = document.createElement('link')
   s.href = i
