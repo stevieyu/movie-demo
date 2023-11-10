@@ -176,20 +176,20 @@
     setTitle(nextItem.html);
   }
 
-  art.controls.add({
-    name: 'nextEpisode',
-    index: 20,
-    position: 'left',
-    html: '',
-    tooltip: '下一集',
-    click: () => {
-      playNext()
-    },
-  });
-  art.on('video:ended', () => {
-    console.log('video:ended')
-    playNext();
-  });
+  // art.controls.add({
+  //   name: 'nextEpisode',
+  //   index: 20,
+  //   position: 'left',
+  //   html: '',
+  //   tooltip: '下一集',
+  //   click: () => {
+  //     playNext()
+  //   },
+  // });
+  // art.on('video:ended', () => {
+  //   console.log('video:ended')
+  //   playNext();
+  // });
 
   art.setting.add({
     name: 'analecta',
