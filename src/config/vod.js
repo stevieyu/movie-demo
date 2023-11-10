@@ -10,4 +10,4 @@ export const url = [
   'http://jiguang.pro/api.php/provide/vod/',// 随机微广告
   'https://api.haiwaikan.com/v1/vod',
   'https://kuaikan-api.com/api.php/provide/vod/'
-][0]
+][2]
