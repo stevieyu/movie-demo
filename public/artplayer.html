@@ -186,10 +186,9 @@
   //     playNext()
   //   },
   // });
-  // art.on('video:ended', () => {
-  //   console.log('video:ended')
-  //   playNext();
-  // });
+  art.on('video:ended', () => {
+    playNext();
+  });
 
   art.setting.add({
     name: 'analecta',
