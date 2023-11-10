@@ -52,22 +52,8 @@
     type: 'm3u8',
     customType: {
       m3u8: (video, url, art) => {
-        // if (Hls.isSupported()) {
-        //   if (art.hls) art.hls.destroy();
-        //   const hls = new Hls({
-        //     maxMaxBufferLength: 10,
-        //   });
-        //   hls.loadSource(url);
-        //   hls.attachMedia(video);
-        //   art.hls = hls;
-        //   art.on('destroy', () => hls.destroy());
-        // } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        //   video.src = url;
-        // } else {
-        //   art.notice.show = '不支持的播放格式：m3u8';
-        // }
         if (Hls.P2pEngine.isMSESupported()) {
-          var hls = new Hls({
+          const hls = new Hls({
             p2pConfig
           });
           hls.loadSource(url);
