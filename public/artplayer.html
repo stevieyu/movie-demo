@@ -11,27 +11,26 @@
     #artplayer-app {
         position: relative;
         min-height: 200px;
-
-        .art-video-player {
-            min-width: 100%;
-            min-height: 100%;
-            max-height: 100vw;
-            position: absolute;
-        }
-        .art-layer-title{
-            width:100%;
-            background: linear-gradient(130deg, rgba(0,0,0,.4), rgba(0,0,0,.1));
-            color: #ccc;
-            position: absolute;
-            top: 0;
-            left: 0;
-            padding:.2em;
-            transition: transform .2s;
-            transform: translateY(-100%);
-        }
-        .art-control-show .art-layer-title{
-            transform: translateY(0%);
-        }
+    }
+    .art-video-player {
+        min-width: 100%;
+        min-height: 100%;
+        max-height: 100vw;
+        position: absolute;
+    }
+    .art-layer-title{
+        width:100%;
+        background: linear-gradient(130deg, rgba(0,0,0,.4), rgba(0,0,0,.1));
+        color: #ccc;
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding:.2em;
+        transition: transform .2s;
+        transform: translateY(-100%);
+    }
+    .art-control-show .art-layer-title{
+        transform: translateY(0%);
     }
 </style>
 
