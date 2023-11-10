@@ -68,6 +68,14 @@
     }
   }
 
+  const playList = (option = {}) => {
+    return (art) => {
+      return {
+        name: 'playList',
+      }
+    }
+  }
+
   //https://www.artplayer.org/document/start/option.html
   const art = new Artplayer({
     container: '#artplayer-app',
@@ -88,6 +96,24 @@
         }
       },
     },
+    plugins: [
+      playList({
+        title,
+        list: [
+          {
+            name: '第01集',
+            url: 'https://iqiyi.1080tg.com/20230302/zmbujJjg/index.m3u8'
+          },
+          {
+            name: '第02集',
+            url: 'https://iqiyi.1080tg.com/20230302/ffWRAZbA/index.m3u8',
+          }, {
+            name: '第03集',
+            url: 'https://iqiyi.1080tg.com/20230309/oD25RB0z/index.m3u8',
+          },
+        ]
+      })
+    ],
     autoplay: true,
     pip: true,
     autoSize: true,
@@ -142,6 +168,14 @@
   art.switchUrl(findItem.url)
   findItem.default = true
   setTitle(findItem.html);
+  const playNext = () => {
+    if((findIdx + 1) >= selector.length) return
+    findItem.default = false
+    const nextItem = selector[findIdx + 1]
+    nextItem.default = true
+    art.switchUrl(nextItem.url)
+    setTitle(nextItem.html);
+  }
 
   art.controls.add({
     name: 'nextEpisode',
@@ -149,9 +183,13 @@
     position: 'left',
     html: '',
     tooltip: '下一集',
-    click: (...args) => {
-      console.info('click', args);
+    click: () => {
+      playNext()
     },
+  });
+  art.on('video:ended', () => {
+    console.log('video:ended')
+    playNext();
   });
 
   art.setting.add({
