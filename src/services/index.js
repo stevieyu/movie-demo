@@ -11,6 +11,8 @@ if(!importKey) {
 }else if(!randomImport[importKey]){
   importKey = importKeys[0]
 }
-if(!location.port) randomImport[importKey]();
+if (!location.port) {
+  randomImport[importKey]();
+}
 
 
