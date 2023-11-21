@@ -1,12 +1,3 @@
-/**
- * main.js
- *
- * Bootstraps Vuetify and other plugins then mounts the App`
- */
-
-// Components
-import App from './App.vue'
-
 // Composables
 import { createApp } from 'vue'
 
@@ -16,6 +7,11 @@ import { registerPlugins } from '@/plugins'
 //Services
 import '@/services'
 
+import 'virtual:uno.css'
+
+// Components
+import App from './App.vue'
+
 window.HELP_IMPROVE_VIDEOJS = false;
 window.__DEV__ = import.meta.env.DEV
 
@@ -23,6 +19,6 @@ const app = createApp(App)
 
 registerPlugins(app)
 
-import 'virtual:uno.css'
+
 
 app.mount('#app')
