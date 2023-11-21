@@ -2,7 +2,7 @@
   <v-progress-linear color="primary" indeterminate style="min-height: 4px;" v-if="fetching"/>
   <v-alert v-if="error" closable :text="error.message" type="error" variant="tonal"/>
   <search-input @submit="searchSubmit" />
-  <div class="overflow-auto max-h-full d-flex flex-wrap pa-2">
+  <div class="overflow-auto max-h-full d-flex flex-wrap pa-2" ref="elList">
     <div v-for="item in movies" :key="item.id" class="pa-2 w-full sm:w-1/2 lg:w-1/3 2xl:w-1/4">
       <v-card v-ripple @click="$router.push(`/videos/${item.id}`)">
         <v-img
@@ -82,6 +82,8 @@ query($pg: Int, $c: Int, $wd: String, $url: URL){
   )
 })
 
+const elList = ref(null)
+
 
 const movies = ref([])
 watch(data, () => {
@@ -98,10 +100,11 @@ watch(data, () => {
     return {...i, pic, content}
   })
   if(variables.pg === 1) {
-    movies.value = _movies
-  }else{
-    movies.value.push(..._movies)
+    movies.value = []
+    elList.value?.scrollTo(0,0)
   }
+
+  movies.value.push(..._movies)
 
   // console.log('watchEffect: ', movies.value)
 }, {
