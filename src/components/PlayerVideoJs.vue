@@ -1,7 +1,6 @@
 <template>
   <div class="flex flex-wrap max-h-full">
-    <div class="w-full md:w-2/3">
-      <video-js ref="videoPlayerEl" class="video-js vjs-big-play-centered vjs-fluid" />
+    <div class="w-full md:w-2/3" ref="videoPlayerEl">
     </div>
     <div class="w-full md:w-1/3 flex flex-column max-h-full">
       <pre>{{peer}}</pre>
@@ -79,9 +78,11 @@ const engine = new P2PEngineHls({
 
 let player;
 onMounted(() => {
+  videoPlayerEl.value.innerHTML = `<video-js class="video-js vjs-big-play-centered vjs-fluid" />`
+
   // https://www.cdnbye.com/oms/#/user/liveDataGlobal
   player = videojs(
-    videoPlayerEl.value,
+    videoPlayerEl.value.querySelector(`video-js`),
     {
       ...videoPlayerDefaultOptions
     },

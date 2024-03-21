@@ -5,7 +5,7 @@
         <v-form validate-on="submit lazy" @submit.prevent="submit">
           <v-text-field v-model="form.wd" clearable label="关键词"/>
           <v-chip-group filter v-model="form.c" column>
-            <template v-for="i in categories.filter(i=>!+i.pid)" :key="i.id">
+            <template v-for="i in categories.filter(ii=>!+ii.pid)" :key="i.id">
               <v-chip :value="i.id" size="small">
                 {{ i.name }}
               </v-chip>
