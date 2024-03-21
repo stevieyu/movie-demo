@@ -3,7 +3,7 @@
   <v-alert v-if="error" closable :text="error.message" type="error" variant="tonal"/>
   <search-input @submit="searchSubmit" />
   <div class="overflow-auto max-h-full d-flex flex-wrap pa-2" ref="elList">
-    <div v-for="item in movies" :key="item.id" class="pa-2 w-full sm:w-1/2 lg:w-1/3 2xl:w-1/4">
+    <div v-for="item in movies" :key="item.id" class="pa-2 w-full sm:w-1/2 lg:w-1/3 2xl:w-1/4" style="content-visibility: auto;">
       <v-card v-ripple @click="$router.push(`/videos/${item.id}`)">
         <v-img
           :src="item.pic"

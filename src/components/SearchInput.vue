@@ -4,12 +4,12 @@
       <v-expansion-panel-text class="overflow-auto max-h-full">
         <v-form validate-on="submit lazy" @submit.prevent="submit">
           <v-text-field v-model="form.wd" clearable label="关键词"/>
-          <v-chip-group filter v-model="form.c">
+          <v-chip-group filter v-model="form.c" column>
             <template v-for="i in categories.filter(i=>!+i.pid)" :key="i.id">
               <v-chip :value="i.id" size="small">
                 {{ i.name }}
               </v-chip>
-              <v-chip :value="ii.id" size="small" v-for="ii in categories.filter(ii=>ii.pid === i.id)" :data-id="ii.id"
+              <v-chip :value="ii.id" size="small" v-for="ii in categories.filter(iii=>iii.pid === i.id)" :data-id="ii.id"
                       :key="ii.id">
                 {{ ii.name }}
               </v-chip>
