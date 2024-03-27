@@ -82,7 +82,7 @@ const playUrl = computed(() => (video.value?.playUrl?.match(/([^$#]+)\$(http[^$#
         type: 'application/x-mpegURL'
       }],
     }
-  })
+  }).reverse()
 )
 
 </script>
