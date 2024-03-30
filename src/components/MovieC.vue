@@ -65,7 +65,7 @@ const video = computed(() => {
 watch(
 	video,
 	(val) => {
-		val.name && (document.title = val.name);
+		val && val.name && (document.title = val.name);
 	},
 	{ immediate: true },
 );

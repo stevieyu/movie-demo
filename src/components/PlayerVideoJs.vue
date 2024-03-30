@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-wrap max-h-full">
-    <div class="w-full md:w-2/3" ref="videoPlayerEl">
+    <div class="sm:w-full md:w-auto flex-auto" ref="videoPlayerEl">
     </div>
-    <div class="w-full md:w-1/3 flex flex-column max-h-full">
+    <div class="sm:w-full md:w-xs lg:w-md flex flex-column max-h-full">
       <pre>{{peer}}</pre>
       <div class="vjs-playlist overflow-auto flex-auto max-h-full" ref="playlistEl"></div>
     </div>
@@ -91,29 +91,53 @@ onMounted(() => {
 		},
 	);
 
+	const historyItem = (player, playlist) => {
+		const idx = +(
+			location.hash.replace("#", "") || localStorage.getItem(location.pathname)
+		);
+		if (idx) {
+			player.playlist.currentItem(idx);
+		}
+		player.on("ended", () => {
+			player.playlist.next();
+		});
+		const originTitle = document.title;
+		player.on("loadedmetadata", () => {
+			const idx = player.playlist.currentIndex();
+			const item = playlist[idx];
+			document.title = originTitle + " " + item.name;
+			history.replaceState({}, "", `#${idx}`);
+			// console.dir(player.playlist);
+		});
+		player.on("dispose", () => {
+			document.title = originTitle;
+		});
+	};
+
+	const playlist = [
+		// {
+		//     name: '第一集',
+		//     sources: [{
+		//         src: 'https://s5.bfzycdn.com/video/lanman/第77集/index.m3u8',
+		//         type: 'application/x-mpegURL'
+		//     }],
+		// }
+		...props.playlist,
+	].filter(
+		(i) => Array.isArray(i.sources) && i.sources.filter((i) => i.src).length,
+	);
+
 	engine
 		.registerServiceWorker()
 		.catch((e) => {
 			console.log("P2PEngineHls error:", e);
 		})
 		.finally(() => {
-			player.playlist(
-				[
-					// {
-					//     name: '第一集',
-					//     sources: [{
-					//         src: 'https://s5.bfzycdn.com/video/lanman/第77集/index.m3u8',
-					//         type: 'application/x-mpegURL'
-					//     }],
-					// }
-					...props.playlist,
-				].filter(
-					(i) =>
-						Array.isArray(i.sources) && i.sources.filter((i) => i.src).length,
-				),
-			);
+			player.playlist(playlist);
+			historyItem(player, playlist);
 			player.playlistUi({
 				el: playlistEl.value,
+				playOnSelect: true,
 			});
 			// https://github.com/prateekrastogi/videojs-landscape-fullscreen
 			// 在移动端根据视频比例选择全屏机制: https://blog.csdn.net/qq_43614372/article/details/129367231
@@ -135,7 +159,6 @@ onBeforeUnmount(() => {
 .vjs-playlist-item-list{
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 
   .vjs-playlist-item {
     margin: .4em;
