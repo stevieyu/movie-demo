@@ -3,8 +3,8 @@
     <div class="sm:w-full md:w-auto flex-auto" ref="videoPlayerEl">
     </div>
     <div class="sm:w-full md:w-xs lg:w-md flex flex-column max-h-full">
-      <pre>{{peer}}</pre>
       <div class="vjs-playlist overflow-auto flex-auto max-h-full" ref="playlistEl"></div>
+      <pre>{{peer}}</pre>
     </div>
   </div>
 </template>
