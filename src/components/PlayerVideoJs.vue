@@ -92,9 +92,7 @@ onMounted(() => {
 	);
 
 	const historyItem = (player, playlist) => {
-		const idx = +(
-			location.hash.replace("#", "") || localStorage.getItem(location.pathname)
-		);
+		let idx = +localStorage.getItem(location.pathname);
 		if (idx) {
 			player.playlist.currentItem(idx);
 		}
@@ -103,11 +101,10 @@ onMounted(() => {
 		});
 		const originTitle = document.title;
 		player.on("loadedmetadata", () => {
-			const idx = player.playlist.currentIndex();
+			idx = player.playlist.currentIndex();
 			const item = playlist[idx];
 			document.title = originTitle + " " + item.name;
-			history.replaceState({}, "", `#${idx}`);
-			// console.dir(player.playlist);
+			localStorage.setItem(location.pathname, idx);
 		});
 		player.on("dispose", () => {
 			document.title = originTitle;
