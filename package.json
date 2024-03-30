@@ -6,12 +6,11 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint . --fix --ignore-path .gitignore"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@tanstack/vue-virtual": "^3.2.0",
-    "@urql/exchange-graphcache": "^6.5.0",
+    "@urql/exchange-graphcache": "^6.5.1",
     "@urql/vue": "^1.1.2",
     "@vueuse/core": "^10.9.0",
     "pinia": "^2.1.7",
@@ -19,17 +18,17 @@
     "radash": "^12.1.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
-    "vuetify": "^3.5.11"
+    "vuetify": "^3.5.13"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.6.3",
     "@vitejs/plugin-vue": "^5.0.4",
-    "eslint": "^8.57.0",
-    "eslint-plugin-vue": "^9.23.0",
     "sass": "^1.72.0",
-    "unocss": "^0.58.6",
+    "unocss": "^0.58.8",
     "unplugin-fonts": "^1.1.1",
     "unplugin-vue-components": "latest",
-    "vite": "^5.2.2",
+    "vite": "^5.2.7",
+    "vite-plugin-biome": "^1.0.9",
     "vite-plugin-vuetify": "^2.0.3"
   }
 }

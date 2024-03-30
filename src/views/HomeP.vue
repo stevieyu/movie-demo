@@ -6,10 +6,9 @@
 
 <script setup>
 // import HelloWorld from '@/components/HelloWorld.vue'
-import MovieC from '@/components/MovieC.vue';
-import MoviesC from '@/components/MoviesC.vue'
-import {useRoute} from 'vue-router'
+import MovieC from "@/components/MovieC.vue";
+import MoviesC from "@/components/MoviesC.vue";
+import { useRoute } from "vue-router";
 
-const $route = useRoute()
-
+const $route = useRoute();
 </script>

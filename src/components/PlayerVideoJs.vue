@@ -9,122 +9,127 @@
   </div>
 </template>
 <script setup>
-import {onMounted, onBeforeUnmount, ref, reactive} from 'vue'
+import { onMounted, onBeforeUnmount, ref, reactive } from "vue";
 
 const props = defineProps({
-  playlist: {
-    type: Array,
-    required: true
-  }
-})
+	playlist: {
+		type: Array,
+		required: true,
+	},
+});
 
-const videoPlayerEl = ref(null)
-const playlistEl = ref(null)
+const videoPlayerEl = ref(null);
+const playlistEl = ref(null);
 
 // https://videojs.com/guides/options/
 const videoPlayerDefaultOptions = {
-  debug: false,
-  autoplay: false,
-  controls: true,
-  preload: 'auto',
-  playbackRates: [0.5, 1, 1.5, 2, 3, 4, 5],
-  language: 'zh-Hans',
-  languages: {
-    'zh-Hans': {
-      "Now Playing": "正在播放",
-      "Up Next": "播放下一个",
-      "Untitled Video": "无标题视频"
-    }
-  },
-  html5: {
-    //https://github.com/videojs/http-streaming#list
-    vhs: {
-      overrideNative: true,
-      cacheEncryptionKeys: true,
-      useBandwidthFromLocalStorage: true,
-    },
-    nativeAudioTracks: false,
-    nativeVideoTracks: false
-  }
-}
+	debug: false,
+	autoplay: false,
+	controls: true,
+	preload: "auto",
+	playbackRates: [0.5, 1, 1.5, 2, 3, 4, 5],
+	language: "zh-Hans",
+	languages: {
+		"zh-Hans": {
+			"Now Playing": "正在播放",
+			"Up Next": "播放下一个",
+			"Untitled Video": "无标题视频",
+		},
+	},
+	html5: {
+		//https://github.com/videojs/http-streaming#list
+		vhs: {
+			overrideNative: true,
+			cacheEncryptionKeys: true,
+			useBandwidthFromLocalStorage: true,
+		},
+		nativeAudioTracks: false,
+		nativeVideoTracks: false,
+	},
+};
 
-const peer = reactive({})
+const peer = reactive({});
 
-const {videojs, P2PEngineHls} = window
+const { videojs, P2PEngineHls } = window;
 
 //https://swarmcloud.net/cn/views/hls-de/API.html#p2penginehls-api
 const engine = new P2PEngineHls({
-  // logLevel: true,
-  live: false,
-  // token: 'Ta-XNIdZg',
-  // sharePlaylist: true,
-  trackerZone: 'hk',
-  swFile: '/worker-swarmcloud.js',
-  getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
-    const total = totalHTTPDownloaded + totalP2PDownloaded;
-    peer.stats = {
-      download_ratio: Math.round(totalP2PDownloaded/total*100) + '%',
-      downloaded: totalP2PDownloaded + 'KB',
-      uploaded: totalP2PUploaded + 'KB'
-    }
-  },
-  getPeerId (id) {
-    peer.id = id
-  },
-  getPeersInfo (info) {
-    peer.info = info
-  }
-})
+	// logLevel: true,
+	live: false,
+	// token: 'Ta-XNIdZg',
+	// sharePlaylist: true,
+	trackerZone: "hk",
+	swFile: "/worker-swarmcloud.js",
+	getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
+		const total = totalHTTPDownloaded + totalP2PDownloaded;
+		peer.stats = {
+			download_ratio: Math.round((totalP2PDownloaded / total) * 100) + "%",
+			downloaded: totalP2PDownloaded + "KB",
+			uploaded: totalP2PUploaded + "KB",
+		};
+	},
+	getPeerId(id) {
+		peer.id = id;
+	},
+	getPeersInfo(info) {
+		peer.info = info;
+	},
+});
 
 let player;
 onMounted(() => {
-  videoPlayerEl.value.innerHTML = `<video-js class="video-js vjs-big-play-centered vjs-fluid" />`
+	videoPlayerEl.value.innerHTML = `<video-js class="video-js vjs-big-play-centered vjs-fluid" />`;
 
-  // https://www.cdnbye.com/oms/#/user/liveDataGlobal
-  player = videojs(
-    videoPlayerEl.value.querySelector(`video-js`),
-    {
-      ...videoPlayerDefaultOptions
-    },
-    () => {
-      //   player.log('onPlayerReady');
-    }
-  );
+	// https://www.cdnbye.com/oms/#/user/liveDataGlobal
+	player = videojs(
+		videoPlayerEl.value.querySelector(`video-js`),
+		{
+			...videoPlayerDefaultOptions,
+		},
+		() => {
+			//   player.log('onPlayerReady');
+		},
+	);
 
-  engine.registerServiceWorker()
-    .catch(e => {
-      console.log('P2PEngineHls error:', e)
-    })
-    .finally(() => {
-      player.playlist([
-        // {
-        //     name: '第一集',
-        //     sources: [{
-        //         src: 'https://s5.bfzycdn.com/video/lanman/第77集/index.m3u8',
-        //         type: 'application/x-mpegURL'
-        //     }],
-        // }
-        ...props.playlist
-      ].filter(i => Array.isArray(i.sources) && i.sources.filter(i => i.src).length));
-      player.playlistUi({
-        el: playlistEl.value
-      });
-      // https://github.com/prateekrastogi/videojs-landscape-fullscreen
-      // 在移动端根据视频比例选择全屏机制: https://blog.csdn.net/qq_43614372/article/details/129367231
-      player.landscapeFullscreen({
-        fullscreen: {
-          enterOnRotate: true, // 横向旋转设备时进入全屏模式
-          exitOnRotate: true, // 纵向旋转设备时退出全屏模式
-          alwaysInLandscapeMode: true, // 始终以横向模式进入全屏模式，即使设备处于纵向模式
-          iOS: true //是否在iOS上使用假全屏（显示播放器控件而不是系统控件需要）
-        }
-      });
-    })
-
-})
+	engine
+		.registerServiceWorker()
+		.catch((e) => {
+			console.log("P2PEngineHls error:", e);
+		})
+		.finally(() => {
+			player.playlist(
+				[
+					// {
+					//     name: '第一集',
+					//     sources: [{
+					//         src: 'https://s5.bfzycdn.com/video/lanman/第77集/index.m3u8',
+					//         type: 'application/x-mpegURL'
+					//     }],
+					// }
+					...props.playlist,
+				].filter(
+					(i) =>
+						Array.isArray(i.sources) && i.sources.filter((i) => i.src).length,
+				),
+			);
+			player.playlistUi({
+				el: playlistEl.value,
+			});
+			// https://github.com/prateekrastogi/videojs-landscape-fullscreen
+			// 在移动端根据视频比例选择全屏机制: https://blog.csdn.net/qq_43614372/article/details/129367231
+			player.landscapeFullscreen({
+				fullscreen: {
+					enterOnRotate: true, // 横向旋转设备时进入全屏模式
+					exitOnRotate: true, // 纵向旋转设备时退出全屏模式
+					alwaysInLandscapeMode: true, // 始终以横向模式进入全屏模式，即使设备处于纵向模式
+					iOS: true, //是否在iOS上使用假全屏（显示播放器控件而不是系统控件需要）
+				},
+			});
+		});
+});
 onBeforeUnmount(() => {
-  player && player.dispose()
-})
+	player && player.dispose();
+});
 </script>
 <style>
 .vjs-playlist-item-list{

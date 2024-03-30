@@ -30,25 +30,25 @@
   </v-expansion-panels>
 </template>
 <script setup>
-import {computed, reactive, ref} from "vue";
-import {gql, useQuery} from '@urql/vue';
-import {url} from "@/config/vod";
+import { computed, reactive, ref } from "vue";
+import { gql, useQuery } from "@urql/vue";
+import { url } from "@/config/vod";
 
-const emit = defineEmits(['submit'])
-const vepValue = ref([])
+const emit = defineEmits(["submit"]);
+const vepValue = ref([]);
 const form = reactive({
-  wd: '',
-  c: '',
-  ...Object.fromEntries((new URLSearchParams(location.search)))
-})
+	wd: "",
+	c: "",
+	...Object.fromEntries(new URLSearchParams(location.search)),
+});
 
 const submit = () => {
-  emit('submit', form)
-  vepValue.value = []
-}
+	emit("submit", form);
+	vepValue.value = [];
+};
 
-const {data} = useQuery({
-  query: gql`
+const { data } = useQuery({
+	query: gql`
     query($url: URL){
       categories(_url: $url){
         id
@@ -56,15 +56,15 @@ const {data} = useQuery({
         pid
       }
     }`,
-  variables: {url}
-})
+	variables: { url },
+});
 
 const categories = computed(() =>
-  (data.value?.categories || []).map(i => ({
-    ...i,
-    id: i.id + '',
-    pid: i.pid + ''
-  }))
-)
+	(data.value?.categories || []).map((i) => ({
+		...i,
+		id: i.id + "",
+		pid: i.pid + "",
+	})),
+);
 </script>
 

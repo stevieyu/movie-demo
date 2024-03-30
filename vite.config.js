@@ -14,6 +14,8 @@ import UnoCSS from 'unocss/vite'
 import presetUno from '@unocss/preset-uno'
 import presetAttributify from '@unocss/preset-attributify'
 
+import biomePlugin from 'vite-plugin-biome';
+
 
 // Utilities
 import { defineConfig } from 'vite'
@@ -55,6 +57,11 @@ export default defineConfig({
           ]
         }
       }
+    }),
+    biomePlugin({
+      mode: 'format',
+      files: 'src/**/*', // Format only JavaScript files in src
+      applyFixes: true
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({

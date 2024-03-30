@@ -39,25 +39,25 @@
   </div>
 </template>
 <script setup>
-import {computed, reactive, ref, watch} from 'vue'
-import {useDebounceFn} from '@vueuse/core'
-import {useRouter} from 'vue-router'
-import { gql, useQuery } from '@urql/vue';
+import { computed, reactive, ref, watch } from "vue";
+import { useDebounceFn } from "@vueuse/core";
+import { useRouter } from "vue-router";
+import { gql, useQuery } from "@urql/vue";
 import SearchInput from "@/components/SearchInput.vue";
-import {url} from "@/config/vod";
+import { url } from "@/config/vod";
 
-const $router = useRouter()
+const $router = useRouter();
 
 const variables = reactive({
-  pg: 1,
-  url,
-  c: '',
-  wd: '',
-  ...Object.fromEntries((new URLSearchParams(location.search)))
-})
+	pg: 1,
+	url,
+	c: "",
+	wd: "",
+	...Object.fromEntries(new URLSearchParams(location.search)),
+});
 
-const {fetching, data, error} = useQuery({
-  query: gql`
+const { fetching, data, error } = useQuery({
+	query: gql`
 query($pg: Int, $c: Int, $wd: String, $url: URL){
   movies(pg: $pg, _url: $url, c: $c, wd: $wd){
     id
@@ -73,55 +73,62 @@ query($pg: Int, $c: Int, $wd: String, $url: URL){
     }
   }
 }`,
-  variables: computed(() =>
-    Object.fromEntries(
-      Object.entries(variables).map(([k, v]) =>
-        [k, 'pg,c'.includes(k) ? +v : v || '']
-      )
-    )
-  )
-})
+	variables: computed(() =>
+		Object.fromEntries(
+			Object.entries(variables).map(([k, v]) => [
+				k,
+				"pg,c".includes(k) ? +v : v || "",
+			]),
+		),
+	),
+});
 
-const elList = ref(null)
+const elList = ref(null);
 
+const movies = ref([]);
+watch(
+	data,
+	() => {
+		const _movies = (data.value?.movies || []).map((i) => {
+			let { pic, content } = i;
+			if (content)
+				content = content
+					.replace(/<[^>]*>/g, "")
+					.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
+			if (pic && /ffzy|haiwaikan/.test(pic)) {
+				// pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
+				// pic = 'https://cxqpwhsdja.cloudimg.io/'+ pic.replace(/https?:\/\//, ''); //25g
+				// pic = 'https://ik.imagekit.io/4e7delgqdnn/'+ pic; //20g
+				// pic = 'https://dg-jx.twic.pics/wsrv/'+ pic.replace(/https?:\/\//, ''); //3g
+				pic = "https://s.stevie.top/" + pic.replace(/https?:\/\//, "");
+			}
+			return { ...i, pic, content };
+		});
+		if (variables.pg === 1) {
+			movies.value = [];
+			elList.value?.scrollTo(0, 0);
+		}
 
-const movies = ref([])
-watch(data, () => {
-  const _movies = (data.value?.movies || []).map((i) => {
-    let {pic, content} = i
-    if(content) content = content.replace(/<[^>]*>/g, '').replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec))
-    if(pic && /ffzy|haiwaikan/.test(pic)){
-      // pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
-      // pic = 'https://cxqpwhsdja.cloudimg.io/'+ pic.replace(/https?:\/\//, ''); //25g
-      // pic = 'https://ik.imagekit.io/4e7delgqdnn/'+ pic; //20g
-      // pic = 'https://dg-jx.twic.pics/wsrv/'+ pic.replace(/https?:\/\//, ''); //3g
-      pic = 'https://s.stevie.top/'+ pic.replace(/https?:\/\//, '');
-    }
-    return {...i, pic, content}
-  })
-  if(variables.pg === 1) {
-    movies.value = []
-    elList.value?.scrollTo(0,0)
-  }
+		movies.value.push(..._movies);
 
-  movies.value.push(..._movies)
-
-  // console.log('watchEffect: ', movies.value)
-}, {
-  immediate: true,
-})
+		// console.log('watchEffect: ', movies.value)
+	},
+	{
+		immediate: true,
+	},
+);
 
 const searchSubmit = (from) => {
-  from = Object.fromEntries(Object.entries(from))
-  Object.assign(variables, from, {pg: 1})
-  $router.replace({
-    query: from
-  })
-}
+	from = Object.fromEntries(Object.entries(from));
+	Object.assign(variables, from, { pg: 1 });
+	$router.replace({
+		query: from,
+	});
+};
 
 const loadMore = useDebounceFn((_pg = null) => {
-  if(fetching.value) return
-  variables.pg = _pg ?? variables.pg+1;
-}, 100)
+	if (fetching.value) return;
+	variables.pg = _pg ?? variables.pg + 1;
+}, 100);
 </script>
 
