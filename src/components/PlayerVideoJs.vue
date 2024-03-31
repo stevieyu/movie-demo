@@ -93,7 +93,7 @@ onMounted(() => {
 
 	const historyItem = (player, playlist) => {
 		let idx = +localStorage.getItem(location.pathname);
-		if (idx) {
+		if (idx >= 0 && idx < playlist.length) {
 			player.playlist.currentItem(idx);
 		}
 		player.on("ended", () => {
