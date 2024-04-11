@@ -9,5 +9,5 @@ export const url = [
 	"http://jiguang.pro/api.php/provide/vod/", // 随机微广告
 	"https://api.haiwaikan.com/v1/vod",
 	"https://kuaikan-api.com/api.php/provide/vod/",
-	"https://sdzyapi.com/api.php/provide/vod/",
+	"https://xsd.sdzyapi.com/api.php/provide/vod/",
 ][9];
