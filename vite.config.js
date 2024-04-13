@@ -8,7 +8,7 @@ import {
 
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
-import ViteFonts from 'unplugin-fonts/vite'
+// import ViteFonts from 'unplugin-fonts/vite'
 
 import UnoCSS from 'unocss/vite'
 import presetUno from '@unocss/preset-uno'
@@ -68,17 +68,17 @@ export default defineConfig({
       autoImport: {labs: true},
       styles: true
     }),
-    ViteFonts({
-      google: {
-        families: [{
-          name: 'Roboto',
-          styles: 'wght@100;300;400;500;700;900',
-        }],
-      },
-    }),
+    // ViteFonts({
+      // google: {
+      //   families: [{
+      //     name: 'Roboto',
+      //     styles: 'wght@100;300;400;500;700;900',
+      //   }],
+      // },
+    // }),
   ],
   css: {
-    // transformer: 'lightningcss'
+    transformer: 'lightningcss'
   },
   define: { 'process.env': {} },
   resolve: {

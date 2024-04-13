@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-wrap max-h-full">
-    <div class="sm:w-full md:w-auto flex-auto" ref="videoPlayerEl">
+    <div class="w-full sm:w-auto flex-auto" ref="videoPlayerEl">
     </div>
-    <div class="sm:w-full md:w-xs lg:w-md flex flex-column max-h-full">
+    <div class="w-full sm:w-40 md:w-xs lg:w-sm flex flex-column max-h-full">
       <div class="vjs-playlist overflow-auto flex-auto max-h-full" ref="playlistEl"></div>
       <pre>{{peer}}</pre>
     </div>
