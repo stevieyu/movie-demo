@@ -78,7 +78,7 @@ export default defineConfig({
     }),
   ],
   css: {
-    transformer: 'lightningcss'
+    // transformer: 'lightningcss'
   },
   define: { 'process.env': {} },
   resolve: {
