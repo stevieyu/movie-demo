@@ -34,7 +34,7 @@ jobs:
         cache: 'pnpm'
     - run: |
         pnpm i && pnpm run build
-        run: cp dist/index.html dist/200.html
+        cp dist/index.html dist/200.html
     
     - name: Deploy to surge.sh
       uses: dswistowski/surge-sh-action@v1
