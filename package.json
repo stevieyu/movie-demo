@@ -23,6 +23,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.6.4",
     "@vitejs/plugin-vue": "^5.0.4",
+    "lightningcss": "^1.24.1",
     "unocss": "latest",
     "unplugin-fonts": "^1.1.1",
     "unplugin-vue-components": "latest",
