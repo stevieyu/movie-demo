@@ -16,6 +16,3 @@ query($url: URL!){
   <pre>{{data?.proxy}}</pre>
 </template>
 
-<style scoped>
-
-</style>
