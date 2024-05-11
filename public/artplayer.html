@@ -97,19 +97,19 @@
     plugins: [
       playList({
         title,
-        list: [
-          {
-            name: '第01集',
-            url: 'https://iqiyi.1080tg.com/20230302/zmbujJjg/index.m3u8'
-          },
-          {
-            name: '第02集',
-            url: 'https://iqiyi.1080tg.com/20230302/ffWRAZbA/index.m3u8',
-          }, {
-            name: '第03集',
-            url: 'https://iqiyi.1080tg.com/20230309/oD25RB0z/index.m3u8',
-          },
-        ]
+        list: `第01集$https://v12.fentvoss.com/sdv12/202404/14/YgsfDTKdNC84/video/index.m3u8
+第02集$https://v4.fentvoss.com/sdv4/202404/21/vD03jKnmXg76/video/index.m3u8
+第03集$https://v12.fentvoss.com/sdv12/202404/28/69v7M5yhwQ84/video/index.m3u8
+第04集$https://v12.fentvoss.com/sdv12/202405/05/60advRWazK84/video/index.m3u8
+第05集$https://v11.fentvoss.com/sdv11/202405/12/yDgUufHjmc3/video/index.m3u8`.split(`\n`)
+            .filter(i => i)
+            .map(i => {
+            i = i.split('$')
+            return {
+              name: i[0],
+              url: i[1]
+            }
+          })
       })
     ],
     autoplay: true,
