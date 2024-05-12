@@ -74,7 +74,7 @@
 
   const logVar = {}
   const logs = () => document.querySelector('#logs').innerHTML = Object.values(logVar).join('<br/>');
-  //https://swarmcloud.net/cn/views/hls-de/API.html#p2penginehls-api
+  //https://swarmcloud.net/cn/web-hls/API.html
   const p2pConfig = {
     // logLevel: 'debug',
     // live: false,
@@ -109,6 +109,94 @@
     }
   }
 
+  /***************************广告过滤**********************************/
+  function generateRegexpFromStrings(array) {
+    if(!array.length) {
+      return null;
+    }
+    let baseString = array[0];
+
+    for (const element of array) {
+      for (let j = 0; j < baseString.length && j <= element.length; j++) {
+        if (baseString[j] !== '*' && baseString[j] !== element[j]) {
+          baseString = element.substring(0, j) + '*' + element.substring(j + 1);
+        }
+      }
+    }
+
+    return baseString.replace(/\*+/g, function (match) {
+      const len = match.length;
+      return '\\w' + (len > 1 ? '{' + len + '}' : '');
+    });
+  }
+  function filterNoSortItemsToRegexp(content = '') {
+    if (!content || typeof content !== 'string') {
+      return null;
+    }
+    let prev = 0;
+    const paths = {};
+    const list = (content.match(/.*?\w+\.ts/g) || []).filter((i, idx) => {
+      const current = +i.replace(/.*?(\d+)\.ts/, '$1');
+      const isNotSort = (current - prev) !== 1;
+      const pathname = i.replace(/(.*?)\w+\.ts/, '$1')
+      if (pathname) {
+        paths[pathname] = (paths[pathname] || 0) + 1;
+      }
+
+      if (!idx || !isNotSort) {
+        prev = current;
+      }
+      if (idx === 1 && isNotSort) {
+        return false
+      }
+      return idx && !isNotSort;
+    })
+    if (!Object.keys(paths).length && !list.length) {
+      return null;
+    }
+    if (list.length) {
+      return generateRegexpFromStrings(list);
+    }
+
+    // 统计路径, 获取数量最少的路径
+    const path = Object.keys(paths)
+      .reduce((prev, current) => paths[prev] < paths[current] ? prev : current)
+      .replace(/\//g, '\\/')
+    return eval(`/${path}\\w+\\.ts/g`);
+  }
+  /***************************广告过滤**********************************/
+  function process(playlist, url) {
+    url = new URL(url)
+    if(playlist.includes('.ts')) {
+      playlist = playlist.replaceAll(url.href.replace(/[^/]+$/, ''), '') // 带域名的相同地址
+        .replaceAll(url.pathname.replace(/[^/]+$/, ''), '') //相同地址
+        .replace(/.*?\s\/.*?\s/g, '') //绝对路径
+        .replace(/#EXT-X-K.*?\s(.*\s)*?.*?Y\s/g, '') // 无内容标签
+        .replace(/(#EXT-X-D.*?\s)+/g, '$1') // 连续
+        .replace(filterNoSortItemsToRegexp(playlist), '')
+
+      // console.log('playlist', playlist)
+    }
+    return playlist;
+  }
+  class pLoader extends Hls.DefaultConfig.loader {
+    constructor(config) {
+      super(config);
+      const load = this.load.bind(this);
+      this.load = function (context, config, callbacks) {
+        if (context.type === 'manifest' || context.type === 'level') {
+          const onSuccess = callbacks.onSuccess;
+          callbacks.onSuccess = function (response, stats, context) {
+            response.data = process(response.data, response.url);
+            onSuccess(response, stats, context);
+          };
+        }
+        load(context, config, callbacks);
+      };
+    }
+  }
+
+
   //https://www.artplayer.org/document/start/option.html
   window.art = new Artplayer({
     container: '#artplayer-app',
@@ -116,8 +204,10 @@
     type: 'm3u8',
     customType: {
       m3u8: (video, url, art) => {
+        //https://github.com/video-dev/hls.js/blob/master/docs/API.md
         if (Hls.P2pEngine.isMSESupported()) {
           const hls = new Hls({
+            pLoader: pLoader,
             p2pConfig
           });
           hls.loadSource(url);
