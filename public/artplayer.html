@@ -145,7 +145,11 @@
       if (!idx || isSort) {
         prev = current;
       }
-      return !isSort && idx;
+      if(idx && !isSort){
+        prev = 0
+        return false
+      }
+      return prev && !isSort && idx;
     })
     if (!Object.keys(paths).length && !list.length) {
       return null;
@@ -154,10 +158,12 @@
       return eval(`/.*\\s${generateRegexpFromStrings(list)}\\s/g`);
     }
 
+    if(Object.keys(paths).length < 2) return null
     // 统计路径, 获取数量最少的路径
     const path = Object.keys(paths)
       .reduce((prev, current) => paths[prev] < paths[current] ? prev : current)
       .replace(/\//g, '\\/')
+
     return eval(`/.*\\s${path}\\w+\\.ts\\s/g`);
   }
   /***************************广告过滤**********************************/
@@ -168,11 +174,14 @@
         .replaceAll(url.pathname.replace(/[^/]+$/, ''), '') //相同地址
         .replace(/.*?\s\/.*?\s/g, '') //绝对路径
 
-      playlist = playlist.replace(filterNoSortItemsToRegexp(playlist), '')
-        .replace(/#EXT-X-K.*?\s(.*\s)*?.*?Y\s/g, '') // 无内容标签
+      const regexp = filterNoSortItemsToRegexp(playlist)
+      if(regexp) {
+        playlist = playlist.replace(filterNoSortItemsToRegexp(playlist), '')
+      }
+      playlist = playlist.replace(/#EXT-X-K.*?\s(.*\s)*?.*?Y\s/g, '') // 无内容标签
         .replace(/(#EXT-X-D.*?\s)+/g, '$1') // 连续
 
-      console.log('playlist', playlist)
+      // console.log('playlist', playlist)
     }
     return playlist;
   }
