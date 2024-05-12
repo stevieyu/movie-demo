@@ -181,21 +181,26 @@
         name: 'nextEpisode',
         index: 20,
         position: 'left',
-        html: `<svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 24 24"><path fill="currentColor" d="M20.095 21a.75.75 0 0 1-.75-.75V3.75a.75.75 0 0 1 1.5 0v16.5a.74.74 0 0 1-.75.75m-3.4-9.589a2.25 2.25 0 0 1-.85 1.82l-9.11 7.09c-.326.247-.713.4-1.12.44h-.23a2.142 2.142 0 0 1-1-.22a2.201 2.201 0 0 1-.9-.81a2.17 2.17 0 0 1-.33-1.16V5.421a2.22 2.22 0 0 1 .31-1.12a2.25 2.25 0 0 1 .85-.8a2.18 2.18 0 0 1 2.24.1l9.12 6.08c.29.191.53.448.7.75a2.3 2.3 0 0 1 .32.98"/></svg>`,
-        tooltip: '下一集',
-        click: () => {
-          playNext()
-        },
       });
     }
     const nextIdx = playNextIdx()
     if(isNaN(nextIdx)) {
       art.controls.update({
         name: 'nextEpisode',
-        tooltip: '无',
+        html: `<svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 20 20"><g fill="currentColor"><path d="M9.863 9.318a1 1 0 0 1 0 1.364l-4.632 4.963c-.62.664-1.731.226-1.731-.682V5.037c0-.908 1.112-1.346 1.731-.682z"/><path fill-rule="evenodd" d="M7.764 10L5.5 7.574v4.852zm2.1.682a1 1 0 0 0 0-1.364L5.23 4.355c-.62-.664-1.731-.226-1.731.682v9.926c0 .908 1.112 1.346 1.731.682z" clip-rule="evenodd"/><path d="M14.863 9.318a1 1 0 0 1 0 1.364l-4.632 4.963c-.62.664-1.731.226-1.731-.682V5.037c0-.908 1.112-1.346 1.731-.682z"/><path fill-rule="evenodd" d="M12.764 10L10.5 7.574v4.852zm2.1.682a1 1 0 0 0 0-1.364L10.23 4.355c-.62-.664-1.731-.226-1.731.682v9.926c0 .908 1.112 1.346 1.731.682z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M15.5 4a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1" clip-rule="evenodd"/><path d="M1.293 2.707a1 1 0 0 1 1.414-1.414l16 16a1 1 0 0 1-1.414 1.414z"/></g></svg>`,
+        tooltip: '无下一集',
+        click: () => {}
       })
       return
     }
+    art.controls.update({
+      name: 'nextEpisode',
+      html: `<svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 20 20"><g fill="currentColor"><path d="M9.863 9.318a1 1 0 0 1 0 1.364l-4.632 4.963c-.62.664-1.731.226-1.731-.682V5.037c0-.908 1.112-1.346 1.731-.682z"/><path fill-rule="evenodd" d="M7.764 10L5.5 7.574v4.852zm2.1.682a1 1 0 0 0 0-1.364L5.23 4.355c-.62-.664-1.731-.226-1.731.682v9.926c0 .908 1.112 1.346 1.731.682z" clip-rule="evenodd"/><path d="M14.863 9.318a1 1 0 0 1 0 1.364l-4.632 4.963c-.62.664-1.731.226-1.731-.682V5.037c0-.908 1.112-1.346 1.731-.682z"/><path fill-rule="evenodd" d="M12.764 10L10.5 7.574v4.852zm2.1.682a1 1 0 0 0 0-1.364L10.23 4.355c-.62-.664-1.731-.226-1.731.682v9.926c0 .908 1.112 1.346 1.731.682z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M15.5 4a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1" clip-rule="evenodd"/></g></svg>`,
+      tooltip: '下一集',
+      click: () => {
+        playNext()
+      },
+    })
   }
 
   const playSwitchItem = (item) => {
@@ -207,14 +212,8 @@
     switchShowNextBtn()
   }
   const playCurrentIdx = () => {
-    const sAnalecta = art.setting.find('analecta')
-
-    if(sAnalecta && !sAnalecta.index) {
-      const storageSelectorDefaultUrl = art.storage.get('storageSelectorDefaultUrl');
-      sAnalecta.index = storageSelectorDefaultUrl ? list.findIndex(i => i.url === storageSelectorDefaultUrl) : 0
-    }
-
-    return sAnalecta.index
+    const storageSelectorDefaultUrl = art.storage.get('storageSelectorDefaultUrl');
+    return storageSelectorDefaultUrl ? list.findIndex(i => i.url === storageSelectorDefaultUrl) : 0
   }
   const playNextIdx = () => {
     const idx = playCurrentIdx() + 1
