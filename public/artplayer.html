@@ -82,7 +82,7 @@
     swFile: '/worker-swarmcloud.js',
     getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
       const total = totalHTTPDownloaded + totalP2PDownloaded;
-      logVar.stats = `p2p ratio: ${Math.round(totalP2PDownloaded / total * 100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
+      logVar.stats = `p2p ratio: ${Math.round(totalP2PDownloaded / total * 100)}%, saved traffic: ${formatSize(totalP2PDownloaded)}, uploaded: ${formatSize(totalP2PUploaded)}`
       logs()
     },
     getPeerId(peerId) {
@@ -94,6 +94,13 @@
       logs()
     }
   }
+
+  const formatSize = (size, decimals = 2) => {
+    if (!+size) return '0 KB';
+    const k = 1024, dm = decimals < 0 ? 0 : decimals, units = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const i = Math.floor(Math.log(size) / Math.log(k));
+    return `${parseFloat((size / Math.pow(k, i)).toFixed(dm))} ${units[i]}`;
+  };
 
   const playList = (option = {}) => {
     return (art) => {
@@ -246,4 +253,6 @@
   art.on('resize', () => {
     art.autoHeight();
   });
+
+
 </script>
