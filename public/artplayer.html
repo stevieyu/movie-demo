@@ -117,9 +117,9 @@
     let baseString = array[0];
 
     for (const element of array) {
-      for (let j = 0; j < baseString.length && j <= element.length; j++) {
+      for (let j = 0; j < baseString.length; j++) {
         if (baseString[j] !== '*' && baseString[j] !== element[j]) {
-          baseString = element.substring(0, j) + '*' + element.substring(j + 1);
+          baseString = baseString.substring(0, j) + '*' + baseString.substring(j+1);
         }
       }
     }
@@ -137,32 +137,28 @@
     const paths = {};
     const list = (content.match(/.*?\w+\.ts/g) || []).filter((i, idx) => {
       const current = +i.replace(/.*?(\d+)\.ts/, '$1');
-      const isNotSort = (current - prev) !== 1;
+      const isSort = (current - prev) === 1;
       const pathname = i.replace(/(.*?)\w+\.ts/, '$1')
       if (pathname) {
         paths[pathname] = (paths[pathname] || 0) + 1;
       }
-
-      if (!idx || !isNotSort) {
+      if (!idx || isSort) {
         prev = current;
       }
-      if (idx === 1 && isNotSort) {
-        return false
-      }
-      return idx && !isNotSort;
+      return !isSort && idx;
     })
     if (!Object.keys(paths).length && !list.length) {
       return null;
     }
     if (list.length) {
-      return generateRegexpFromStrings(list);
+      return eval(`/.*\\s${generateRegexpFromStrings(list)}\\s/g`);
     }
 
     // 统计路径, 获取数量最少的路径
     const path = Object.keys(paths)
       .reduce((prev, current) => paths[prev] < paths[current] ? prev : current)
       .replace(/\//g, '\\/')
-    return eval(`/${path}\\w+\\.ts/g`);
+    return eval(`/.*\\s${path}\\w+\\.ts\\s/g`);
   }
   /***************************广告过滤**********************************/
   function process(playlist, url) {
@@ -171,11 +167,12 @@
       playlist = playlist.replaceAll(url.href.replace(/[^/]+$/, ''), '') // 带域名的相同地址
         .replaceAll(url.pathname.replace(/[^/]+$/, ''), '') //相同地址
         .replace(/.*?\s\/.*?\s/g, '') //绝对路径
+
+      playlist = playlist.replace(filterNoSortItemsToRegexp(playlist), '')
         .replace(/#EXT-X-K.*?\s(.*\s)*?.*?Y\s/g, '') // 无内容标签
         .replace(/(#EXT-X-D.*?\s)+/g, '$1') // 连续
-        .replace(filterNoSortItemsToRegexp(playlist), '')
 
-      // console.log('playlist', playlist)
+      console.log('playlist', playlist)
     }
     return playlist;
   }
