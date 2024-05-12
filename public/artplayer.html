@@ -83,7 +83,7 @@
     swFile: '/worker-swarmcloud.js',
     getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
       const total = totalHTTPDownloaded + totalP2PDownloaded;
-      logVar.stats = `p2p ratio: ${Math.round(totalP2PDownloaded / total * 100)}%, saved traffic: ${formatSize(totalP2PDownloaded)}, uploaded: ${formatSize(totalP2PUploaded)}`
+      logVar.stats = `p2p ratio: ${Math.round(totalP2PDownloaded / total * 100)}%, saved traffic: ${formatFileSize(totalP2PDownloaded)}, uploaded: ${formatFileSize(totalP2PUploaded)}`
       logs()
     },
     getPeerId(peerId) {
@@ -95,13 +95,11 @@
       logs()
     }
   }
-
-  const formatSize = (size, decimals = 2) => {
-    if (!+size) return '0 KB';
-    const k = 1024, dm = decimals < 0 ? 0 : decimals, units = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    const i = Math.floor(Math.log(size) / Math.log(k));
-    return `${parseFloat((size / Math.pow(k, i)).toFixed(dm))} ${units[i]}`;
-  };
+  function formatFileSize(size, decimals = 2) {
+    const units = ['KB', 'MB', 'GB', 'TB'];
+    const i = Math.min(Math.floor(Math.log(size) / Math.log(1024)), units.length - 1);
+    return size ? `${parseFloat((size / Math.pow(1024, i)).toFixed(decimals))} ${units[i]}` : `0 ${units[0]}`;
+  }
 
   const playList = (option = {}) => {
     return (art) => {
