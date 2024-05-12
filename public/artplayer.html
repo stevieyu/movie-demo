@@ -1,6 +1,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="stylesheet" href="https://jsd.onmicrosoft.cn/combine/npm/modern-normalize/modern-normalize.min.css"/>
-<script src="https://jsd.onmicrosoft.cn/combine/npm/artplayer/dist/artplayer.js,npm/swarmcloud-hls/dist/hls.min.js"></script>
+<script src="https://jsd.onmicrosoft.cn/combine/npm/swarmcloud-hls/dist/hls.min.js,npm/artplayer/dist/artplayer.js"></script>
 <style>
     body {
         background: #000;
@@ -34,13 +34,42 @@
 </style>
 
 <div id="artplayer-app"></div>
+<div contenteditable="true" id="textarea" style="width: 100%;">THE NEW GATE$$$第01集$https://v12.fentvoss.com/sdv12/202404/14/YgsfDTKdNC84/video/index.m3u8
+第02集$https://v4.fentvoss.com/sdv4/202404/21/vD03jKnmXg76/video/index.m3u8
+第03集$https://v12.fentvoss.com/sdv12/202404/28/69v7M5yhwQ84/video/index.m3u8
+第04集$https://v12.fentvoss.com/sdv12/202405/05/60advRWazK84/video/index.m3u8
+第05集$https://v11.fentvoss.com/sdv11/202405/12/yDgUufHjmc3/video/index.m3u8</div>
 <div id="logs"></div>
 
 <script type="module">
-  const {
-    src = '',
-    title = 'THE NEW GATE'
-  } = Object.fromEntries(new URLSearchParams(location.search))
+  const {title, list} = (() => {
+    const el = document.querySelector('#textarea')
+    el.addEventListener('keyup', e => {
+      if(e.key === 'Enter') {
+        e.preventDefault()
+        sessionStorage.setItem('config', e.target.innerText)
+        location.reload()
+      }
+    })
+    const config = sessionStorage.getItem('config') || el.innerText.trim()
+    el.value = config
+
+    const src = new URLSearchParams(location.search).get('src') || ''
+
+    return {
+      title: config.replace(/([^${3}]+).*/s, '$1'),
+      list: [
+        (src ? {
+          html: 'src',
+          url: new URLSearchParams(location.search).get('src') || ''
+        } : null),
+        ...config.replace(/([^${3}]+)\${3}/s, '')
+        .split(` `)
+        .map(i => (i.match(/(?<html>.*?)\$(?<url>.*)/) || {}).groups)
+
+      ].filter(i => i)
+    }
+  })()
 
   const logVar = {}
   const logs = () => document.querySelector('#logs').innerHTML = Object.values(logVar).join('<br/>');
@@ -75,9 +104,9 @@
   }
 
   //https://www.artplayer.org/document/start/option.html
-  const art = new Artplayer({
+  window.art = new Artplayer({
     container: '#artplayer-app',
-    url: src,
+    // url: '',
     type: 'm3u8',
     customType: {
       m3u8: (video, url, art) => {
@@ -97,19 +126,7 @@
     plugins: [
       playList({
         title,
-        list: `第01集$https://v12.fentvoss.com/sdv12/202404/14/YgsfDTKdNC84/video/index.m3u8
-第02集$https://v4.fentvoss.com/sdv4/202404/21/vD03jKnmXg76/video/index.m3u8
-第03集$https://v12.fentvoss.com/sdv12/202404/28/69v7M5yhwQ84/video/index.m3u8
-第04集$https://v12.fentvoss.com/sdv12/202405/05/60advRWazK84/video/index.m3u8
-第05集$https://v11.fentvoss.com/sdv11/202405/12/yDgUufHjmc3/video/index.m3u8`.split(`\n`)
-            .filter(i => i)
-            .map(i => {
-            i = i.split('$')
-            return {
-              name: i[0],
-              url: i[1]
-            }
-          })
+        list,
       })
     ],
     autoplay: true,
@@ -146,60 +163,82 @@
   setTitle.title = title
   setTitle();
 
-  const selector = [
-    {
-      html: '第01集',
-      url: 'https://iqiyi.1080tg.com/20230302/zmbujJjg/index.m3u8'
-    },
-    {
-      html: '第02集',
-      url: 'https://iqiyi.1080tg.com/20230302/ffWRAZbA/index.m3u8',
-    }, {
-      html: '第03集',
-      url: 'https://iqiyi.1080tg.com/20230309/oD25RB0z/index.m3u8',
-    },
-  ]
-
-  const storageSelectorDefaultUrl = art.storage.get('storageSelectorDefaultUrl');
-  const findIdx = storageSelectorDefaultUrl ? selector.findIndex(i => i.url === storageSelectorDefaultUrl) : 0
-  const findItem = selector[findIdx < 0 ? 0 : findIdx]
-  art.switchUrl(findItem.url)
-  findItem.default = true
-  setTitle(findItem.html);
-  const playNext = () => {
-    if((findIdx + 1) >= selector.length) return
-    findItem.default = false
-    const nextItem = selector[findIdx + 1]
-    nextItem.default = true
-    art.switchUrl(nextItem.url)
-    setTitle(nextItem.html);
-  }
-
-  // art.controls.add({
-  //   name: 'nextEpisode',
-  //   index: 20,
-  //   position: 'left',
-  //   html: '',
-  //   tooltip: '下一集',
-  //   click: () => {
-  //     playNext()
-  //   },
-  // });
-  art.on('video:ended', () => {
-    playNext();
-  });
 
   art.setting.add({
     name: 'analecta',
     html: '选集',
-    tooltip: selector.find(i => i.default)?.html || '',
-    selector,
+    tooltip: '',
+    selector: list,
     onSelect: (item, _dom, _e) => {
-      art.storage.set('storageSelectorDefaultUrl', item.url);
-      art.switchUrl(item.url);
-      setTitle(item.html);
+      playSwitchItem(item)
       return item.html;
     },
+  });
+
+  const switchShowNextBtn = () => {
+    if(!art.controls.nextEpisode) {
+      art.controls.add({
+        name: 'nextEpisode',
+        index: 20,
+        position: 'left',
+        html: `<svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 24 24"><path fill="currentColor" d="M20.095 21a.75.75 0 0 1-.75-.75V3.75a.75.75 0 0 1 1.5 0v16.5a.74.74 0 0 1-.75.75m-3.4-9.589a2.25 2.25 0 0 1-.85 1.82l-9.11 7.09c-.326.247-.713.4-1.12.44h-.23a2.142 2.142 0 0 1-1-.22a2.201 2.201 0 0 1-.9-.81a2.17 2.17 0 0 1-.33-1.16V5.421a2.22 2.22 0 0 1 .31-1.12a2.25 2.25 0 0 1 .85-.8a2.18 2.18 0 0 1 2.24.1l9.12 6.08c.29.191.53.448.7.75a2.3 2.3 0 0 1 .32.98"/></svg>`,
+        tooltip: '下一集',
+        click: () => {
+          playNext()
+        },
+      });
+    }
+    const nextIdx = playNextIdx()
+    if(isNaN(nextIdx)) {
+      art.controls.update({
+        name: 'nextEpisode',
+        tooltip: '无',
+      })
+      return
+    }
+  }
+
+  const playSwitchItem = (item) => {
+    art.storage.set('storageSelectorDefaultUrl', item.url);
+    list.forEach(i => (i.default = false))
+    item.default = true
+    art.switchUrl(item.url)
+    setTitle(item.html);
+    switchShowNextBtn()
+  }
+  const playCurrentIdx = () => {
+    const sAnalecta = art.setting.find('analecta')
+
+    if(sAnalecta && !sAnalecta.index) {
+      const storageSelectorDefaultUrl = art.storage.get('storageSelectorDefaultUrl');
+      sAnalecta.index = storageSelectorDefaultUrl ? list.findIndex(i => i.url === storageSelectorDefaultUrl) : 0
+    }
+
+    return sAnalecta.index
+  }
+  const playNextIdx = () => {
+    const idx = playCurrentIdx() + 1
+    if(idx >= list.length) return NaN
+    return idx
+  }
+  const playSwitchIdx = (idx = NaN) => {
+    if(isNaN(idx)) idx = playCurrentIdx()
+    if(idx >= list.length) return
+    const item = list[idx < 0 ? 0 : idx]
+    if(!item) return
+
+    playSwitchItem(item)
+    if(art.setting.find('analecta')) art.setting.update({name: 'analecta', tooltip: item.html})
+  }
+  playSwitchIdx()
+
+  const playNext = () => {
+    const nextIdx = playNextIdx()
+    if(!isNaN(nextIdx)) playSwitchIdx(nextIdx)
+  }
+
+  art.on('video:ended', () => {
+    playNext();
   });
 
   art.on('ready', () => {

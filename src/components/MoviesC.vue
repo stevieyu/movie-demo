@@ -96,7 +96,7 @@ watch(
 					.replace(/<[^>]*>/g, "")
 					.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
 			if (pic && /ffzy|haiwaikan/.test(pic)) {
-				pic = 'https://wsrv.nl/?url='+ pic.replace(/https?:\/\//, '')
+				pic = "https://wsrv.nl/?url=" + pic.replace(/https?:\/\//, "");
 				// pic = 'https://cxqpwhsdja.cloudimg.io/'+ pic.replace(/https?:\/\//, ''); //25g
 				// pic = 'https://ik.imagekit.io/4e7delgqdnn/'+ pic; //20g
 				// pic = 'https://dg-jx.twic.pics/wsrv/'+ pic.replace(/https?:\/\//, ''); //3g
