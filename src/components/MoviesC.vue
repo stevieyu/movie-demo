@@ -67,6 +67,10 @@ query($pg: Int, $c: Int, $wd: String, $url: URL){
     pic
     content
     playFrom
+    doubanId
+    doubanScore
+    lang
+    status
     category{
       id
       name
