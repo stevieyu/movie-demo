@@ -60,7 +60,7 @@ const engine = new P2PEngineHls({
 	// sharePlaylist: true,
 	trackerZone: "hk",
 	swFile: "/worker-swarmcloud.js",
-	getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
+	getStats({p2pDownloadSpeed,totalHTTPDownloaded,totalP2PDownloaded,totalP2PUploaded}) {
 		const total = totalHTTPDownloaded + totalP2PDownloaded;
 		peer.stats = {
 			download_ratio: Math.round((totalP2PDownloaded / total) * 100) + "%",
