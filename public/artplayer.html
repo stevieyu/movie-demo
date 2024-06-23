@@ -176,7 +176,7 @@
 
       const regexp = filterNoSortItemsToRegexp(playlist)
       if(regexp) {
-        playlist = playlist.replace(filterNoSortItemsToRegexp(playlist), '')
+        playlist = playlist.replace(regexp, '')
       }
       playlist = playlist.replace(/#EXT-X-K.*?\s(.*\s)*?.*?Y\s/g, '') // 无内容标签
         .replace(/(#EXT-X-D.*?\s)+/g, '$1') // 连续
