@@ -81,10 +81,9 @@
     sharePlaylist: true,
     trackerZone: 'hk',
     // swFile: '/worker-swarmcloud.js',
-    getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
-      console.log(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded);
+    getStats({p2pDownloadSpeed,totalHTTPDownloaded,totalP2PDownloaded,totalP2PUploaded}) {
       const total = totalHTTPDownloaded + totalP2PDownloaded;
-      logVar.stats = `p2p ratio: ${Math.round(totalP2PDownloaded / total * 100)}%, saved traffic: ${formatFileSize(totalP2PDownloaded)}, uploaded: ${formatFileSize(totalP2PUploaded)}`
+      logVar.stats = `p2p ratio: ${Math.round(totalP2PDownloaded / total * 100)}%, saved traffic: ${formatFileSize(totalP2PDownloaded)}, speed: ${formatFileSize(p2pDownloadSpeed)} uploaded: ${formatFileSize(totalP2PUploaded)}`
       logs()
     },
     getPeerId(peerId) {
