@@ -58,11 +58,11 @@ export default defineConfig({
         }
       }
     }),
-    biomePlugin({
-      mode: 'format',
-      files: 'src/**/*', // Format only JavaScript files in src
-      applyFixes: true
-    }),
+    // biomePlugin({
+    //   mode: 'format',
+    //   files: 'src/**/*', // Format only JavaScript files in src
+    //   applyFixes: true
+    // }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({
       autoImport: {labs: true},

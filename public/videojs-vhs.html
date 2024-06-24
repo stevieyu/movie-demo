@@ -21,11 +21,11 @@
 
 <script type="module">
   const src = (new URLSearchParams(location.search)).get('src')
-    || 'https://pptv.1080tg.com/202309/22/riJyehH5nR3/video/index.m3u8'
+    || 'https://v12.fentvoss.com/sdv12/202404/14/YgsfDTKdNC84/video/index.m3u8'
 
   //https://www.cdnbye.com/oms/#/user/liveDataGlobal
   const player = videojs('my_video_1', {
-    logLevel: true,
+    logLevel: false,
     autoplay: false,
     controls: true,
     playbackRates: [0.5, 1, 1.5, 2, 3, 4, 5],
@@ -48,6 +48,8 @@
       nativeVideoTracks: false
     }
   });
+  window.player = player
+
 
   const logVar = {}
   const logs = () => document.querySelector('#logs').innerHTML = Object.values(logVar).join('<br/>');
@@ -55,11 +57,11 @@
   const engine = new P2PEngineHls({
     // logLevel: 'debug',
     // live: false,
-    sharePlaylist: true,
+    // sharePlaylist: true,
     token: 'Ta-XNIdZg',
     trackerZone: 'hk',
     swFile: '/worker-swarmcloud.js',
-    getStats(totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded) {
+    getStats({totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded}) {
       const total = totalHTTPDownloaded + totalP2PDownloaded;
       logVar.stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
       logs()

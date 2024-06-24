@@ -10,4 +10,4 @@ export const url = [
 	"https://api.haiwaikan.com/v1/vod",
 	"https://kuaikan-api.com/api.php/provide/vod/",
 	"https://xsd.sdzyapi.com/api.php/provide/vod/",
-][9];
+][1];
