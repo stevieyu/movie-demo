@@ -68,7 +68,7 @@ function generateRegexpFromStrings(array) {
       playlist = playlist.replace(/#EXT-X-K.*?\s(.*\s)*?.*?Y\s/g, '') // 无内容标签
         .replace(/(#EXT-X-D.*?\s)+/g, '$1') // 连续
 
-      console.log('playlist', playlist)
+      // console.log('playlist', playlist)
     }
     return playlist;
   }

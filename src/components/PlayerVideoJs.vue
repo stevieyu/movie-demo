@@ -90,6 +90,13 @@ onMounted(() => {
 			//   player.log('onPlayerReady');
 		},
 	);
+	player.on('xhr-hooks-ready', () => {
+		player.tech().vhs.xhr.onResponse((request, error, response) => {
+		if(/\.m3u8$/.test(response.url)){
+			response.body = playlistAdFilter(response.body, response.url)
+		}
+		});
+	});
 
 	const historyItem = (player, playlist) => {
 		let idx = +localStorage.getItem(location.pathname);
