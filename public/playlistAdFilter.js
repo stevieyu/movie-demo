@@ -30,15 +30,17 @@ function generateRegexpFromStrings(array) {
       if (pathname) {
         paths[pathname] = (paths[pathname] || 0) + 1;
       }
-      if (!idx || isSort) {
+     
+      // console.log(isSort, current, prev, i);
+    
+      if(!idx || isSort){
         prev = current;
-      }
-      if(idx && !isSort){
-        prev = 0
-        return false
+      }else if(prev > 0){
+        return true
       }
       return prev && !isSort && idx;
     })
+    // console.log(paths, list);
     if (!Object.keys(paths).length && !list.length) {
       return null;
     }
@@ -62,13 +64,14 @@ function generateRegexpFromStrings(array) {
         .replace(/.*?\s\/.*?\s/g, '') //绝对路径
 
       const regexp = filterNoSortItemsToRegexp(playlist)
+    
       if(regexp) {
         playlist = playlist.replace(regexp, '')
       }
       playlist = playlist.replace(/#EXT-X-K.*?\s(.*\s)*?.*?Y\s/g, '') // 无内容标签
         .replace(/(#EXT-X-D.*?\s)+/g, '$1') // 连续
 
-      // console.log('playlist', playlist)
+      // console.log('playlist', playlist, playlist.includes('394ee7b4c560604355'))
     }
     return playlist;
   }

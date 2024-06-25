@@ -4,7 +4,8 @@
 </div>
 <div id="logs"></div>
 <link href="https://jsd.onmicrosoft.cn/npm/video.js@8/dist/video-js.min.css" rel="stylesheet" />
-<script src="https://jsd.onmicrosoft.cn/combine/npm/video.js@8/dist/video.min.js,npm/video.js@8/dist/lang/zh-Hans.min.js,npm/swarmcloud-hls/dist/sw-p2p-engine.min.js" size="250k"></script>
+<script src="https://jsd.onmicrosoft.cn/combine/npm/video.js@8/dist/video.js,npm/video.js@8/dist/lang/zh-Hans.min.js"></script>
+<!-- <script src="https://jsd.onmicrosoft.cn/npm/swarmcloud-hls/dist/sw-p2p-engine.min.js"></script> -->
 <script src="/playlistAdFilter.js" type="module"></script>
 
 <!--  <script src="https://s.stevie.top/fastly.jsdelivr.net/npm/eruda" crossorigin="anonymous"></script>-->
@@ -21,7 +22,8 @@
 
 <script type="module">
   const src = (new URLSearchParams(location.search)).get('src')
-    || 'https://v12.fentvoss.com/sdv12/202404/14/YgsfDTKdNC84/video/index.m3u8'
+    // || 'https://v12.fentvoss.com/sdv12/202404/14/YgsfDTKdNC84/video/index.m3u8'
+    || 'https://svipsvip.ffzy-online5.com/20240108/21888_aedc8246/2000k/hls/mixed.m3u8' // 8:00
 
   //https://www.cdnbye.com/oms/#/user/liveDataGlobal
   const player = videojs('my_video_1', {
@@ -49,40 +51,59 @@
     }
   });
   window.player = player
+  // player.on('playlistrequestcomplete', (event) => {
+  //   console.log('playlistrequestcomplete',player.tech().vhs.xhr, event);
+  // })
+  
+  // const globalXhrRequestHook = (options) => {
+  //     options.beforeSend = (xhr) => {
+  //       xhr.addEventListener("readystatechange", function() {
+  //       if (this.readyState === 4) {
+  //           this.responseText = "Modified " + this.responseText;
+  //         }
+  //       }, false);
+  //     };
+  //     return options;
+  //   };
+  // videojs.Vhs.xhr.onRequest(globalXhrRequestHook);
 
-  player.on('xhr-hooks-ready', () => {
-    player.tech().vhs.xhr.onResponse((request, error, response) => {
-      if(/\.m3u8$/.test(response.url)){
-        response.body = playlistAdFilter(response.body, response.url)
-      }
-    });
-  });
+  // player.on('xhr-hooks-ready', () => {
+    // const playerXhrRequestHook = (request, error, response) => {
+    //   if(/\.m3u8$/.test(response.url)){
+    //     response.body = playlistAdFilter(response.body, response.url)
+    //     // response.rawRequest.response = response.body
+    //     // request.responseText = response.body
+    //     console.log('playerXhrRequestHook', player.tech().vhs.playlists);
+    //   }
+    // }
+    // player.tech().vhs.xhr.onResponse(playerXhrRequestHook);
+  // });
 
 
   const logVar = {}
   const logs = () => document.querySelector('#logs').innerHTML = Object.values(logVar).join('<br/>');
   //https://swarmcloud.net/cn/views/hls-de/API.html#p2penginehls-api
-  const engine = new P2PEngineHls({
-    // logLevel: 'debug',
-    // live: false,
-    // sharePlaylist: true,
-    token: 'Ta-XNIdZg',
-    trackerZone: 'hk',
-    swFile: '/worker-swarmcloud.js',
-    getStats({totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded}) {
-      const total = totalHTTPDownloaded + totalP2PDownloaded;
-      logVar.stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
-      logs()
-    },
-    getPeerId (peerId) {
-      logVar.peerId = 'peerId: ' + peerId
-      logs()
-    },
-    getPeersInfo (peers) {
-      logVar.peerId = 'peersInfo: ' + peers
-      logs()
-    }
-  })
+  // const engine = new P2PEngineHls({
+  //   // logLevel: 'debug',
+  //   // live: false,
+  //   // sharePlaylist: true,
+  //   token: 'Ta-XNIdZg',
+  //   trackerZone: 'hk',
+  //   swFile: '/worker-swarmcloud.js',
+  //   getStats({totalP2PDownloaded, totalP2PUploaded, totalHTTPDownloaded}) {
+  //     const total = totalHTTPDownloaded + totalP2PDownloaded;
+  //     logVar.stats = `p2p ratio: ${Math.round(totalP2PDownloaded/total*100)}%, saved traffic: ${totalP2PDownloaded}KB, uploaded: ${totalP2PUploaded}KB`
+  //     logs()
+  //   },
+  //   getPeerId (peerId) {
+  //     logVar.peerId = 'peerId: ' + peerId
+  //     logs()
+  //   },
+  //   getPeersInfo (peers) {
+  //     logVar.peerId = 'peersInfo: ' + peers
+  //     logs()
+  //   }
+  // })
   function dataUrlToObjectUrl(dataUrl) {
     if(!/^data:/.test(dataUrl)) return dataUrl
     const byteString = atob(dataUrl.replace(/^.*?,/, ''));
@@ -94,22 +115,26 @@
         { type: dataUrl.replace(/^data:(.*?)[;,].*$/, '$1') })
     );
   }
-  //https://github.com/swarm-cloud/hls-p2p-engine/blob/main/demo/videojs-vhs.html
-  engine.registerServiceWorker().finally(async () => {
-    setTimeout(() => {
-      player.src({
-        src: dataUrlToObjectUrl(src),
-        type: 'application/x-mpegURL'
-      })
-    }, 100)
-
-    addEventListener('beforeunload', () => {
-      navigator.serviceWorker.getRegistrations().then((registrations) => {
-        for (let registration of registrations) {
-          if(!registration.active.scriptURL.includes(engine.realEngine.config.swFile)) continue;
-          registration.unregister();
-        }
-      });
-    });
+  player.src({
+    src: dataUrlToObjectUrl(src),
+    type: 'application/x-mpegURL'
   })
+  //https://github.com/swarm-cloud/hls-p2p-engine/blob/main/demo/videojs-vhs.html
+  // engine.registerServiceWorker().finally(async () => {
+  //   setTimeout(() => {
+  //     player.src({
+  //       src: dataUrlToObjectUrl(src),
+  //       type: 'application/x-mpegURL'
+  //     })
+  //   }, 100)
+
+  //   addEventListener('beforeunload', () => {
+  //     navigator.serviceWorker.getRegistrations().then((registrations) => {
+  //       for (let registration of registrations) {
+  //         if(!registration.active.scriptURL.includes(engine.realEngine.config.swFile)) continue;
+  //         registration.unregister();
+  //       }
+  //     });
+  //   });
+  // })
 </script>
