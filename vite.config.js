@@ -95,4 +95,19 @@ export default defineConfig({
       '.vue',
     ],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id){
+          id = id.replace(process.cwd(),'')
+          if(id.includes('node_modules')){
+            const isVendor = !/vue/.test(id)
+            if(isVendor) {
+              return 'vendor'
+            }
+          }
+        }
+      }
+    }
+  }
 })
