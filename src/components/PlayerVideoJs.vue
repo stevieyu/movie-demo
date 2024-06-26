@@ -90,13 +90,24 @@ onMounted(() => {
 			//   player.log('onPlayerReady');
 		},
 	);
-	player.on('xhr-hooks-ready', () => {
-		player.tech().vhs.xhr.onResponse((request, error, response) => {
-		if(/\.m3u8$/.test(response.url)){
-			response.body = playlistAdFilter(response.body, response.url)
+	const onResponseFilterAds = function(request, error, response) {
+		if(/\.m3u8$/.test(response.url) && /.*?\.ts/.test(response.body)){
+		const uriArr = playlistAdFilter(response.body, response.url).match(/.*?\.ts/g) || []
+		if(uriArr.length){
+			const loadedmetadata = () => {
+			const {playlists} = this || player.tech().vhs
+			playlists.media_.segments = playlists.media_.segments.filter(i => uriArr.includes(i.uri))
+			player.off('loadedmetadata', loadedmetadata)
+			}
+			player.on('loadedmetadata', loadedmetadata)
 		}
-		});
+		}
+	}
+	player.on('xhr-hooks-ready', () => {
+	  const {vhs} = player.tech();
+	  vhs.xhr.onResponse(onResponseFilterAds.bind(vhs))
 	});
+	// videojs.Vhs.xhr.onResponse(onResponseFilterAds);
 
 	const historyItem = (player, playlist) => {
 		let idx = +localStorage.getItem(location.pathname);
