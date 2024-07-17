@@ -24,7 +24,7 @@ jobs:
 
     - uses: pnpm/action-setup@v3
       with:
-        version: 8
+        version: 9
         run_install: false
 
     - name: Use Node.js ${{ matrix.node-version }}
@@ -33,7 +33,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
     - run: |
-        pnpm i && pnpm run build
+        pnpm install --no-frozen-lockfile && pnpm run build
         cp dist/index.html dist/200.html
     
     - name: Deploy to surge.sh
