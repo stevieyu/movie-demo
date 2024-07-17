@@ -22,46 +22,58 @@ function generateRegexpFromStrings(array) {
       return null;
     }
     let prev = 0;
-    const paths = {};
-    const list = (content.match(/.*?\w+\.ts/g) || []).filter((i, idx) => {
+    let isSort = false
+    const dirs_count = {};
+
+    const ads = (content.match(/.*?\w+\.ts/g) || []).filter((i, idx) => {
       const current = +i.replace(/.*?(\d+)\.ts/, '$1');
-      const isSort = (current - prev) === 1;
-      const pathname = i.replace(/(.*?)\w+\.ts/, '$1')
-      if (pathname) {
-        paths[pathname] = (paths[pathname] || 0) + 1;
+      const isNotSort = (current - prev) != 1;
+
+      const dir = i.replace(/(.*?)\w+\.ts/, '$1')
+      if (dir) {
+        dirs_count[dir] = (dirs_count[dir] || 0) + 1;
       }
      
       // console.log(isSort, current, prev, i);
     
-      if(!idx || isSort){
+      if(!idx || isNotSort){
         prev = current;
-      }else if(prev > 0){
-        return true
       }
-      return prev && !isSort && idx;
+      if(idx == 1 && isNotSort){
+        isSort = false;
+      }
+      if (!isSort) {
+        return false;
+      }
+      return idx > 0 && isNotSort;
     })
     // console.log(paths, list);
-    if (!Object.keys(paths).length && !list.length) {
-      return null;
+    if (ads.length > 0) {
+      let regex = new RegExp('.*?\\s(' + ads.map(escapeRegExp).join('|') + ')\\s', 'g');
+      content = content.replace(regex, '');
+    } else if (Object.keys(dirs_count).length >= 2) {
+      let sorted_dirs = Object.keys(dirs_count).sort((a, b) => dirs_count[a] - dirs_count[b]);
+      let remove_dir = sorted_dirs[0];
+      remove_dir = remove_dir.replace(/\//g, '\\/').replace(/\./g, '\\.');
+      content = content.replace(new RegExp('#EXTINF.*?\\s' + remove_dir + '.*?\\s', 'g'), '');
     }
-    if (list.length) {
-      return eval(`/.*\\s${generateRegexpFromStrings(list)}\\s/g`);
-    }
+    content = content.replace(/(#EXT-X-DIS.*?\s){2,}/g, '$1');
 
-    if(Object.keys(paths).length < 2) return null
-    // 统计路径, 获取数量最少的路径
-    const path = Object.keys(paths)
-      .reduce((prev, current) => paths[prev] < paths[current] ? prev : current)
-      .replace(/\//g, '\\/')
-
-    return eval(`/.*\\s${path}\\w+\\.ts\\s/g`);
+    return content;
   }
   function process(playlist, url) {
     url = new URL(url)
+    url.dir = url.pathname.replace(/[^/]+$/, '')
     if(playlist.includes('.ts')) {
-      playlist = playlist.replaceAll(url.href.replace(/[^/]+$/, ''), '') // 带域名的相同地址
-        .replaceAll(url.pathname.replace(/[^/]+$/, ''), '') //相同地址
-        .replace(/.*?\s\/.*?\s/g, '') //绝对路径
+      playlist = playlist
+        .replace(eval(`/(\s)${url.dir.replace(/([./])/g, `\\$1`)}/g`), '$1') //统一内容路径, 绝对转相对
+        .replace(/.*?\s\/.*?\s/g, '') //移除绝对路径
+        .replace(/(#EXT-X-DIS.*?\s#EXT-X-KEY.*?\s){2,}/, '') //带key的无分片块
+     
+
+      // playlist = playlist.replaceAll(url.href.replace(/[^/]+$/, ''), '') // 带域名的相同地址
+      //   .replaceAll(url.dir, '') //相同地址
+      //   .replace(/.*?\s\/.*?\s/g, '') //绝对路径
 
       const regexp = filterNoSortItemsToRegexp(playlist)
     
