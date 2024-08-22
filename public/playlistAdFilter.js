@@ -49,7 +49,7 @@ function generateRegexpFromStrings(array) {
     })
     // console.log(paths, list);
     if (ads.length > 0) {
-      let regex = new RegExp('.*?\\s(' + ads.map(escapeRegExp).join('|') + ')\\s', 'g');
+      let regex = generateRegexpFromStrings(ads);
       content = content.replace(regex, '');
     } else if (Object.keys(dirs_count).length >= 2) {
       let sorted_dirs = Object.keys(dirs_count).sort((a, b) => dirs_count[a] - dirs_count[b]);
@@ -68,22 +68,33 @@ function generateRegexpFromStrings(array) {
       playlist = playlist
         .replace(eval(`/(\s)${url.dir.replace(/([./])/g, `\\$1`)}/g`), '$1') //统一内容路径, 绝对转相对
         .replace(/.*?\s\/.*?\s/g, '') //移除绝对路径
-        .replace(/(#EXT-X-DIS.*?\s#EXT-X-KEY.*?\s){2,}/, '') //带key的无分片块
+        .replace(/(#EXT-X-DIS.*?\s(#EXT-X-KEY.*?\s)+){2,}/, '') //带key的无分片块
+        .replace(/#EXT-X-D((?!#EXT-X-D).)+3\.333333.*?UITY\s/gs, '') //带3.33时长片段的广告 https://vip.ffzy-video.com/20240808/272_7a614fd0/index.m3u8
      
 
       // playlist = playlist.replaceAll(url.href.replace(/[^/]+$/, ''), '') // 带域名的相同地址
       //   .replaceAll(url.dir, '') //相同地址
       //   .replace(/.*?\s\/.*?\s/g, '') //绝对路径
 
-      const regexp = filterNoSortItemsToRegexp(playlist)
+      playlist = filterNoSortItemsToRegexp(playlist)
     
-      if(regexp) {
-        playlist = playlist.replace(regexp, '')
-      }
-      playlist = playlist.replace(/#EXT-X-K.*?\s(.*\s)*?.*?Y\s/g, '') // 无内容标签
-        .replace(/(#EXT-X-D.*?\s)+/g, '$1') // 连续
+      // if(regexp) {
+      //   playlist = playlist.replace(regexp, '')
+      // }
+      // playlist = playlist.replace(/#EXT-X-K.*?\s(.*\s)*?.*?Y\s/g, '') // 无内容标签
+      //   .replace(/(#EXT-X-D.*?\s)+/g, '$1') // 连续
 
-      // console.log('playlist', playlist, playlist.includes('394ee7b4c560604355'))
+
+      const secondsToTime = (s) => `${Math.floor(s / 3600)}h${Math.floor((s % 3600) / 60)}m${Math.floor(s % 60)}s`
+      let s = 0
+      console.log(`playlist[${url}]:`, playlist.match(/#EXTI.*?\s.*?ts/g)
+      .map(i => {
+        s+= +i.replace(/.*?([\d.]+),\s.*/, '$1')
+       return {
+        s: secondsToTime(s),
+        raw: i
+       } 
+      }))
     }
     return playlist;
   }

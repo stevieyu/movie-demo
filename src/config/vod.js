@@ -1,7 +1,7 @@
 export const url = [
 	null,
 	"http://bfzyapi.com/api.php/provide/vod/",
-	// 'http://by.bfzyapi.com/api.php/provide/vod/',
+	'http://by.bfzyapi.com/api.php/provide/vod/',
 	"http://cj.lziapi.com/api.php/provide/vod/",
 	"http://cj.ffzyapi.com/api.php/provide/vod/",
 	"http://suoniapi.com/api.php/provide/vod/",
@@ -10,4 +10,4 @@ export const url = [
 	"https://api.haiwaikan.com/v1/vod",
 	"https://kuaikan-api.com/api.php/provide/vod/",
 	"https://xsd.sdzyapi.com/api.php/provide/vod/",
-][3];
+][2];
