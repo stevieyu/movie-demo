@@ -6,13 +6,13 @@
     "preview": "vite preview --port 5173 --host 0.0.0.0"
   },
   "dependencies": {
-    "@tanstack/vue-virtual": "^3.10.1",
+    "@tanstack/vue-virtual": "^3.10.4",
     "@urql/exchange-graphcache": "^6.5.1",
     "@urql/vue": "^1.4.1",
-    "@vueuse/core": "^11.0.1",
+    "@vueuse/core": "^11.0.3",
     "es-toolkit": "^1.16.0",
     "pinia": "^2.2.2",
-    "primevue": "^4.0.4",
+    "primevue": "^4.0.5",
     "radash": "^12.1.0",
     "vue": "^3.4.38",
     "vue-router": "^4.4.3",
