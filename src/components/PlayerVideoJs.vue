@@ -58,7 +58,7 @@ const engine = new P2PEngineHls({
 	live: false,
 	// token: 'Ta-XNIdZg',
 	// sharePlaylist: true,
-	trackerZone: "hk",
+	trackerZone: "cn",
 	swFile: "/worker-swarmcloud.js",
 	getStats({p2pDownloadSpeed,totalHTTPDownloaded,totalP2PDownloaded,totalP2PUploaded}) {
 		const total = totalHTTPDownloaded + totalP2PDownloaded;
